@@ -1,6 +1,8 @@
 #ifndef SRC_GRAPH_GRAPH_H_
 #define SRC_GRAPH_GRAPH_H_
 
+#include <dot_writer/DotWriter.h>
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -33,13 +35,16 @@ class Graph {
  private:
   vector<vector<int>> adjacency_matrix_;
   ifstream *input_file_;
+  ofstream *output_file_;
 
   void IsInputFileOpened();
+  void IsOutputFileOpened();
   void ReadAdjacencyMatrixSize();
   void ReadAdjacencyMatrix();
   void IsLineCorrect(string &line);
   void ReadLineToMatrixRow(string &line, int row);
   void ShiftToNextNumber(string &line, size_t *i);
+  void CreateDotWriterObject();
 
   void PRINT();  // !!!
 };

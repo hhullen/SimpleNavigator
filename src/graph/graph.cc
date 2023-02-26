@@ -93,10 +93,25 @@ void Graph::ShiftToNextNumber(string &line, size_t *i) {
 }
 
 void Graph::ExportGraphToDot(const string &path) {
-  ifstream file(path);
-  if (!file.is_open()) {
+  ofstream file(path);
+  output_file_ = &file;
+
+  IsOutputFileOpened();
+  CreateDotWriterObject();
+
+  output_file_->close();
+  output_file_ = nullptr;
+}
+
+void Graph::IsOutputFileOpened() {
+  if (!output_file_->is_open()) {
     throw invalid_argument("File cuold not be opened.");
   }
+}
+
+void Graph::CreateDotWriterObject() {
+  // DotWriter::Node node("a");
+  // DotWriter::Graph dot_object;
 }
 
 void Graph::PRINT() {
