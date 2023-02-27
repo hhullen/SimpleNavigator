@@ -11,8 +11,8 @@
 #include <string>
 #include <vector>
 
-#include "Enums.h"
 #include "AttributeSet.h"
+#include "Enums.h"
 #include "IdManager.h"
 #include "Idable.h"
 
@@ -26,16 +26,16 @@ class Node;
 /**
  * Represents a graph. It's a bag of nodes and edges, basically.
  */
-class Graph : public Idable  {
-protected:
+class Graph : public Idable {
+ protected:
   bool _isDigraph;
-  IdManager* _idManager;   // Managed by root graph.
+  IdManager* _idManager;  // Managed by root graph.
   // I use vector since output order matters.
   std::string _label;
-  std::vector<Node *> _nodes;
-  std::vector<Edge *> _edges;
-  std::vector<Subgraph *> _subgraphs;
-  std::vector<Cluster *> _clusters;
+  std::vector<Node*> _nodes;
+  std::vector<Edge*> _edges;
+  std::vector<Subgraph*> _subgraphs;
+  std::vector<Cluster*> _clusters;
   NodeAttributeSet _defaultNodeAttributes;
   EdgeAttributeSet _defaultEdgeAttributes;
   // Used as 'tab' in output DOT files.
@@ -43,7 +43,7 @@ protected:
   // Used to determine how many _tabCharacters are printed per tab level.
   static const unsigned _tabIncrement;
 
-public:
+ public:
   /**
    * Constructs a new Graph object.
    * - isDigraph: Set to 'true' if this is a directed graph.
@@ -51,21 +51,19 @@ public:
    * - id: Custom id (optional)
    */
   Graph(IdManager* idManager, bool isDigraph = false, std::string label = "",
-    std::string id = "somegraph") :
-    Idable(idManager->ValidateCustomId(id)),
-    _isDigraph(isDigraph), _idManager(idManager),
-    _label(label),
-    _defaultNodeAttributes(NodeAttributeSet()),
-    _defaultEdgeAttributes(EdgeAttributeSet()) {
-  }
+        std::string id = "somegraph")
+      : Idable(idManager->ValidateCustomId(id)),
+        _isDigraph(isDigraph),
+        _idManager(idManager),
+        _label(label),
+        _defaultNodeAttributes(NodeAttributeSet()),
+        _defaultEdgeAttributes(EdgeAttributeSet()) {}
 
   virtual ~Graph();
 
   /** Simple getters and setters **/
 
-  bool IsDigraph() {
-    return _isDigraph;
-  }
+  bool IsDigraph() { return _isDigraph; }
 
   EdgeAttributeSet& GetDefaultEdgeAttributes() {
     return _defaultEdgeAttributes;
@@ -140,17 +138,16 @@ public:
    * as removeEdge(dst, src).
    * TODO(jvilk): Implement.
    */
-  //void RemoveEdge(Node* src, Node* dst);
+  // void RemoveEdge(Node* src, Node* dst);
 
   virtual void Print(std::ostream& out, unsigned tabDepth) = 0;
 
-protected:
+ protected:
   /**
    * Prints nodes, edges, cluster subgraphs, and subgraphs.
    */
   void PrintNECS(std::ostream& out, unsigned tabDepth);
 };
-
 
 }  // namespace DotWriter
 

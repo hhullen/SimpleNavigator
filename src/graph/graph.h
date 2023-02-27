@@ -8,6 +8,10 @@
 #include <string>
 #include <vector>
 
+using DotWriter::Edge;
+using DotWriter::EdgeAttributeSet;
+using DotWriter::Node;
+using DotWriter::RootGraph;
 using std::atoi;
 using std::getline;
 using std::ifstream;
@@ -15,6 +19,7 @@ using std::invalid_argument;
 using std::isdigit;
 using std::ofstream;
 using std::string;
+using std::to_string;
 using std::vector;
 
 namespace s21 {
@@ -30,12 +35,14 @@ class Graph {
   void Resize(int size);
   int get_size();
   void LoadGraphFromFile(const string &path);
-  void ExportGraphToDot(const string &path);
+  void ExportGraphToDot(const string &path,
+                        const string &graph_name = "somegraph");
 
  private:
   vector<vector<int>> adjacency_matrix_;
   ifstream *input_file_;
   ofstream *output_file_;
+  vector<Node *> nodes_;
 
   void IsInputFileOpened();
   void IsOutputFileOpened();
@@ -44,7 +51,10 @@ class Graph {
   void IsLineCorrect(string &line);
   void ReadLineToMatrixRow(string &line, int row);
   void ShiftToNextNumber(string &line, size_t *i);
-  void CreateDotWriterObject();
+  void WriteDotWriterObject(const string &graph_name);
+  void AddNodesToDotWriterObject(RootGraph &dot_object);
+  void AddEdgesToDotWriterObject(RootGraph &dot_object);
+  void AddEdgeBetwenNodesToDotWriterObject(int i, int j, RootGraph &dot_object);
 
   void PRINT();  // !!!
 };

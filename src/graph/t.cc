@@ -7,5 +7,7 @@ int main() {
   gg.LoadGraphFromFile(
       "/Users/hhullen/PROJECTS/github/SimpleNavigator/src/tests/"
       "graph_example.txt");
+  gg.ExportGraphToDot(
+      "/Users/hhullen/PROJECTS/github/SimpleNavigator/src/graph/dot.txt");
   return 0;
 }

@@ -1,6 +1,7 @@
 #include "graph.h"
 
 namespace s21 {
+
 Graph::Graph() {}
 
 Graph::Graph(int size) { Resize(size); }
@@ -92,12 +93,12 @@ void Graph::ShiftToNextNumber(string &line, size_t *i) {
   --(*i);
 }
 
-void Graph::ExportGraphToDot(const string &path) {
+void Graph::ExportGraphToDot(const string &path, const string &graph_name) {
   ofstream file(path);
   output_file_ = &file;
 
   IsOutputFileOpened();
-  CreateDotWriterObject();
+  WriteDotWriterObject(graph_name);
 
   output_file_->close();
   output_file_ = nullptr;
@@ -105,19 +106,57 @@ void Graph::ExportGraphToDot(const string &path) {
 
 void Graph::IsOutputFileOpened() {
   if (!output_file_->is_open()) {
-    throw invalid_argument("File cuold not be opened.");
+    throw invalid_argument("File could not be opened.");
   }
 }
 
-void Graph::CreateDotWriterObject() {
-  // DotWriter::Node node("a");
-  // DotWriter::Graph dot_object;
+void Graph::WriteDotWriterObject(const string &graph_name) {
+  RootGraph dot_object(false, "", graph_name);
+
+  AddNodesToDotWriterObject(dot_object);
+  AddEdgesToDotWriterObject(dot_object);
+
+  dot_object.Print(*output_file_, 2);
+  nodes_.clear();
+  nodes_.shrink_to_fit();
+}
+
+void Graph::AddNodesToDotWriterObject(RootGraph &dot_object) {
+  size_t size = get_size();
+  for (int i = 1; i <= size; ++i) {
+    string name = to_string(i);
+    Node *node = dot_object.AddNode("", name);
+    nodes_.push_back(node);
+  }
+}
+
+void Graph::AddEdgesToDotWriterObject(RootGraph &dot_object) {
+  size_t size = get_size();
+  for (size_t i = 0; i < size; ++i) {
+    for (size_t j = 0; j < size; ++j) {
+      AddEdgeBetwenNodesToDotWriterObject(i, j, dot_object);
+    }
+  }
+}
+
+void Graph::AddEdgeBetwenNodesToDotWriterObject(int i, int j,
+                                                RootGraph &dot_object) {
+  if (i != j) {
+    string name_i = to_string(i);
+    string name_j = to_string(j);
+    Node *node_i = nodes_[i];
+    Node *node_j = nodes_[j];
+    Edge *edge = dot_object.AddEdge(node_i, node_j);
+    EdgeAttributeSet &attribute = edge->GetAttributes();
+    string weight = to_string((*this)(i, j));
+    attribute.AddCustomAttribute("weight", weight);
+  }
 }
 
 void Graph::PRINT() {
   for (int i = 0; i < get_size(); ++i) {
     for (int j = 0; j < get_size(); ++j) {
-      std::cout << adjacency_matrix_[i][j] << " ";
+      std::cout << (*this)(i, j) << " ";
     }
     std::cout << "\n";
   }
