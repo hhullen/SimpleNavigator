@@ -1,8 +1,8 @@
 #ifndef DOTWRITER_IDMANAGER_H
 #define DOTWRITER_IDMANAGER_H
 
-#include <string>
 #include <set>
+#include <string>
 
 namespace DotWriter {
 
@@ -11,12 +11,12 @@ namespace DotWriter {
  * This object also manages the memory for each ID.
  */
 class IdManager {
-private:
+ private:
   unsigned long _nextNodeIdNum;
   unsigned long _nextSubgraphIdNum;
   // This is the next number to append to a non-unique custom ID supplied by the
   // user. Why just one count? It's simpler, and guarantees that I don't try the
-  // same number twice. 
+  // same number twice.
   // So if a user tries to create many nodes with the ID "foo", I don't retry
   // "foo0" as an alternative more than once across all attempts to use that ID.
   unsigned long _nextCustomIdNum;
@@ -24,17 +24,11 @@ private:
 
   /** Use these functions to access the above ID counters within this class. **/
 
-  unsigned long GetNextNodeIdNum() {
-    return _nextNodeIdNum++;
-  }
+  unsigned long GetNextNodeIdNum() { return _nextNodeIdNum++; }
 
-  unsigned long GetNextSubgraphIdNum() {
-    return _nextSubgraphIdNum++;
-  }
+  unsigned long GetNextSubgraphIdNum() { return _nextSubgraphIdNum++; }
 
-  unsigned long GetNextCustomIdNum() {
-    return _nextCustomIdNum++;
-  }
+  unsigned long GetNextCustomIdNum() { return _nextCustomIdNum++; }
 
   /**
    * Registers the given ID with the ID manager.
@@ -49,12 +43,10 @@ private:
     return *retVal.first;
   }
 
-public:
-  IdManager() : _nextNodeIdNum(0), _nextSubgraphIdNum(0), _nextCustomIdNum(0) {
+ public:
+  IdManager() : _nextNodeIdNum(0), _nextSubgraphIdNum(0), _nextCustomIdNum(0) {}
 
-  }
-
-  virtual ~IdManager() {};
+  virtual ~IdManager(){};
 
   /**
    * Get a unique node ID. Used when the user does not specify

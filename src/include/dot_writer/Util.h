@@ -13,7 +13,7 @@ namespace DotWriter {
  * http://stackoverflow.com/questions/3418231/c-replace-part-of-a-string-with-another-string
  */
 void ReplaceAll(std::string& str, const std::string& from,
-  const std::string& to);
+                const std::string& to);
 
 /**
  * Takes a string and escapes necessary characters for output to a

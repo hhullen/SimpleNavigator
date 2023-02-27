@@ -67,7 +67,7 @@ const std::string& IdManager::ValidateCustomId(std::string customId) {
   std::string newCustomId;
 
   while (!success) {
-    oss << customId << GetNextCustomIdNum(); 
+    oss << customId << GetNextCustomIdNum();
 
     newCustomId = oss.str();
     const std::string& val2 = RegisterId(&success, newCustomId);
@@ -81,7 +81,7 @@ const std::string& IdManager::ValidateCustomId(std::string customId) {
 
 const std::string& IdManager::ValidateCustomClusterId(std::string customId) {
   // Ensure it begins with 'cluster'
-  if (customId.substr(0,7).compare("cluster") != 0) {
+  if (customId.substr(0, 7).compare("cluster") != 0) {
     customId = "cluster" + customId;
   }
 

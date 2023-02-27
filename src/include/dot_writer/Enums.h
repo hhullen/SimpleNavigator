@@ -45,46 +45,30 @@ struct EdgeArrowTypeName {
     COUNT
   };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(EdgeArrowTypeName::e);
 };
 
 struct EdgeStyle {
-  enum e {
-    DEFAULT,
-    DASHED,
-    DOTTED,
-    SOLID,
-    INVIS,
-    BOLD,
-    TAPERED,
-    COUNT
-  };
+  enum e { DEFAULT, DASHED, DOTTED, SOLID, INVIS, BOLD, TAPERED, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(EdgeStyle::e val);
 };
 
 struct DirType {
-  enum e {
-    DEFAULT,
-    FORWARD,
-    BACK,
-    BOTH,
-    NONE,
-    COUNT
-  };
+  enum e { DEFAULT, FORWARD, BACK, BOTH, NONE, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(DirType::e val);
 };
 
@@ -103,10 +87,10 @@ struct NodeStyle {
     COUNT
   };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(NodeStyle::e val);
 };
 
@@ -151,262 +135,160 @@ struct NodeShape {
     COUNT
   };
 
-private:
-    static const char* strings[];
+ private:
+  static const char* strings[];
 
-public:
+ public:
   static const char* ToString(NodeShape::e val);
 };
 
 struct Charset {
-  enum e {
-    DEFAULT,
-    UTF8,
-    LATIN1,
-    COUNT
-  };
+  enum e { DEFAULT, UTF8, LATIN1, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(Charset::e val);
 };
 
 struct OutputMode {
-  enum e {
-    DEFAULT,
-    BREADTHFIRST,
-    NODESFIRST,
-    EDGESFIRST,
-    COUNT
-  };
+  enum e { DEFAULT, BREADTHFIRST, NODESFIRST, EDGESFIRST, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(OutputMode::e val);
 };
 
 struct ClusterMode {
-  enum e {
-    DEFAULT,
-    LOCAL,
-    GLOBAL,
-    NONE,
-    COUNT
-  };
+  enum e { DEFAULT, LOCAL, GLOBAL, NONE, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(ClusterMode::e val);
 };
 
 struct LabelLoc {
-  enum e {
-    DEFAULT,
-    T,
-    B,
-    C,
-    COUNT
-  };
+  enum e { DEFAULT, T, B, C, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(LabelLoc::e val);
 };
 
 struct PageDir {
-  enum e {
-    DEFAULT,
-    BL, 
-    BR,
-    TL,
-    TR,
-    RB,
-    RT,
-    LB,
-    LT,
-    COUNT
-  };
+  enum e { DEFAULT, BL, BR, TL, TR, RB, RT, LB, LT, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(PageDir::e val);
 };
 
 struct QuadType {
-  enum e {
-    DEFAULT,
-    NORMAL,
-    FAST,
-    NONE,
-    COUNT
-  };
+  enum e { DEFAULT, NORMAL, FAST, NONE, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(QuadType::e val);
 };
 
 struct RankType {
-  enum e {
-    DEFAULT,
-    SAME,
-    MIN,
-    SOURCE,
-    MAX,
-    SINK,
-    COUNT
-  };
+  enum e { DEFAULT, SAME, MIN, SOURCE, MAX, SINK, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(RankType::e val);
 };
 
 struct RankDir {
-  enum e {
-    DEFAULT,
-    TB,
-    LR,
-    BT,
-    RL,
-    COUNT
-  };
+  enum e { DEFAULT, TB, LR, BT, RL, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(RankDir::e val);
 };
 
 struct DirEdgeConstraints {
-  enum e {
-    DEFAULT,
-    TRUE,
-    HIER,
-    COUNT
-  };
+  enum e { DEFAULT, TRUE, HIER, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(DirEdgeConstraints::e val);
 };
 
 struct CompassPoint {
-  enum e {
-    DEFAULT,
-    N,
-    NE,
-    E,
-    SE,
-    S,
-    SW,
-    W,
-    NW,
-    C,
-    COUNT
-  };
+  enum e { DEFAULT, N, NE, E, SE, S, SW, W, NW, C, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(CompassPoint::e val);
 };
 
 struct Model {
-  enum e {
-    DEFAULT,
-    CIRCUIT,
-    SUBSET,
-    MDS,
-    COUNT
-  };
+  enum e { DEFAULT, CIRCUIT, SUBSET, MDS, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(Model::e val);
 };
 
 struct Ordering {
-  enum e {
-    DEFAULT,
-    OUT,
-    IN,
-    COUNT
-  };
+  enum e { DEFAULT, OUT, IN, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(Ordering::e val);
 };
 
 struct Mode {
-  enum e {
-    DEFAULT,
-    MAJOR,
-    KK,
-    HIER,
-    IPSEP,
-    COUNT
-  };
+  enum e { DEFAULT, MAJOR, KK, HIER, IPSEP, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(Mode::e val);
 };
 
 struct Justification {
-  enum e {
-    DEFAULT,
-    LEFT,
-    RIGHT,
-    COUNT
-  };
+  enum e { DEFAULT, LEFT, RIGHT, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(Justification::e val);
 };
 
 struct Ratio {
-  enum e {
-    DEFAULT,
-    FILL,
-    COMPRESS,
-    EXPAND,
-    AUTO,
-    COUNT
-  };
+  enum e { DEFAULT, FILL, COMPRESS, EXPAND, AUTO, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(Ratio::e val);
 };
 
@@ -423,44 +305,30 @@ struct SmoothType {
     COUNT
   };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(SmoothType::e val);
 };
 
 struct SplineType {
-  enum e {
-    DEFAULT,
-    LINE,
-    SPLINE,
-    POLYLINE,
-    ORTHO,
-    COMPOUND,
-    COUNT
-  };
+  enum e { DEFAULT, LINE, SPLINE, POLYLINE, ORTHO, COMPOUND, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(SplineType::e val);
 };
 
 struct ImageScaleType {
-  enum e {
-    DEFAULT,
-    WIDTH,
-    HEIGHT,
-    BOTH,
-    COUNT
-  };
+  enum e { DEFAULT, WIDTH, HEIGHT, BOTH, COUNT };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(ImageScaleType::e val);
 };
 
@@ -1132,10 +1000,10 @@ struct Color {
     COUNT
   };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(Color::e val);
 };
 
@@ -1303,10 +1171,10 @@ struct AttributeType {
     COUNT
   };
 
-private:
+ private:
   static const char* strings[];
 
-public:
+ public:
   static const char* ToString(AttributeType::e val);
 };
 

@@ -14,21 +14,19 @@
 namespace DotWriter {
 
 class Subgraph : public Graph {
-private:
+ private:
   SubgraphAttributeSet _attributes;
 
-public:
+ public:
   Subgraph(const std::string& id, IdManager* idManager, bool isDigraph = false,
-    std::string label = "") : Graph(idManager, isDigraph, label, id),
-    _attributes(SubgraphAttributeSet()) {
-  }
+           std::string label = "")
+      : Graph(idManager, isDigraph, label, id),
+        _attributes(SubgraphAttributeSet()) {}
 
-  virtual ~Subgraph() {};
+  virtual ~Subgraph(){};
 
   /** Getters and setters **/
-  SubgraphAttributeSet& GetAttributes() {
-    return _attributes;
-  }
+  SubgraphAttributeSet& GetAttributes() { return _attributes; }
 
   virtual void Print(std::ostream& out, unsigned tabDepth);
 };

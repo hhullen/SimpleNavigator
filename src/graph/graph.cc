@@ -2,9 +2,11 @@
 
 namespace s21 {
 
-Graph::Graph() {}
+Graph::Graph() : input_file_(nullptr), output_file_(nullptr) {}
 
-Graph::Graph(int size) { Resize(size); }
+Graph::Graph(int size) : input_file_(nullptr), output_file_(nullptr) {
+  Resize(size);
+}
 
 Graph::~Graph() {
   adjacency_matrix_.clear();
@@ -14,6 +16,10 @@ Graph::~Graph() {
 int &Graph::operator()(int i, int j) { return adjacency_matrix_[i][j]; }
 
 void Graph::Resize(int size) {
+  if (size < 1) {
+    throw invalid_argument("Incorrect adjacency matrix size.");
+  }
+
   adjacency_matrix_.resize(size);
   adjacency_matrix_.shrink_to_fit();
   for (vector<int> &row : adjacency_matrix_) {
@@ -34,7 +40,6 @@ void Graph::LoadGraphFromFile(const string &path) {
 
   input_file_->close();
   input_file_ = nullptr;
-  PRINT();
 }
 
 void Graph::IsInputFileOpened() {
@@ -150,15 +155,6 @@ void Graph::AddEdgeBetwenNodesToDotWriterObject(int i, int j,
     EdgeAttributeSet &attribute = edge->GetAttributes();
     string weight = to_string((*this)(i, j));
     attribute.AddCustomAttribute("weight", weight);
-  }
-}
-
-void Graph::PRINT() {
-  for (int i = 0; i < get_size(); ++i) {
-    for (int j = 0; j < get_size(); ++j) {
-      std::cout << (*this)(i, j) << " ";
-    }
-    std::cout << "\n";
   }
 }
 

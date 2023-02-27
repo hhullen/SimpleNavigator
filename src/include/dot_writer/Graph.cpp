@@ -4,10 +4,11 @@
  * Author: John Vilk (jvilk@cs.umass.edu)
  */
 #include "Graph.h"
-#include "Subgraph.h"
+
 #include "Cluster.h"
-#include "Node.h"
 #include "Edge.h"
+#include "Node.h"
+#include "Subgraph.h"
 
 namespace DotWriter {
 
@@ -16,25 +17,25 @@ const char Graph::_tabCharacter = ' ';
 const unsigned Graph::_tabIncrement = 2;
 
 Graph::~Graph() {
-  std::vector<Node *>::iterator nodeIt;
+  std::vector<Node*>::iterator nodeIt;
   for (nodeIt = _nodes.begin(); nodeIt != _nodes.end(); nodeIt++) {
     delete *nodeIt;
   }
 
-  std::vector<Edge *>::iterator edgeIt;
+  std::vector<Edge*>::iterator edgeIt;
   for (edgeIt = _edges.begin(); edgeIt != _edges.end(); edgeIt++) {
     delete *edgeIt;
   }
 
-  std::vector<Subgraph *>::iterator sgIt;
+  std::vector<Subgraph*>::iterator sgIt;
   for (sgIt = _subgraphs.begin(); sgIt != _subgraphs.end(); sgIt++) {
     delete *sgIt;
   }
 }
 
 Subgraph* Graph::AddSubgraph(const std::string& label) {
-  Subgraph* sg = new Subgraph(_idManager->GetSubgraphId(), _idManager,
-    IsDigraph(), label);
+  Subgraph* sg =
+      new Subgraph(_idManager->GetSubgraphId(), _idManager, IsDigraph(), label);
   _subgraphs.push_back(sg);
   return sg;
 }
@@ -47,18 +48,17 @@ Subgraph* Graph::AddSubgraph(const std::string& label, const std::string& id) {
 }
 
 void Graph::RemoveSubgraph(Subgraph* subgraph) {
-  std::vector<Subgraph*>::iterator it = std::find(_subgraphs.begin(),
-    _subgraphs.end(), subgraph);
+  std::vector<Subgraph*>::iterator it =
+      std::find(_subgraphs.begin(), _subgraphs.end(), subgraph);
 
-  if (it != _subgraphs.end())
-    _subgraphs.erase(it);
+  if (it != _subgraphs.end()) _subgraphs.erase(it);
 
   delete subgraph;
 }
 
 Cluster* Graph::AddCluster(const std::string& label) {
-  Cluster* cluster = new Cluster(_idManager->GetClusterId(), _idManager,
-    IsDigraph(), label);
+  Cluster* cluster =
+      new Cluster(_idManager->GetClusterId(), _idManager, IsDigraph(), label);
   _clusters.push_back(cluster);
   return cluster;
 }
@@ -71,11 +71,10 @@ Cluster* Graph::AddCluster(const std::string& label, const std::string& id) {
 }
 
 void Graph::RemoveCluster(Cluster* cluster) {
-  std::vector<Cluster*>::iterator it = std::find(_clusters.begin(),
-    _clusters.end(), cluster);
+  std::vector<Cluster*>::iterator it =
+      std::find(_clusters.begin(), _clusters.end(), cluster);
 
-  if (it != _clusters.end())
-    _clusters.erase(it);
+  if (it != _clusters.end()) _clusters.erase(it);
 
   delete cluster;
 }
@@ -99,8 +98,8 @@ Node* Graph::AddNode(const std::string& label, const std::string& id) {
 }
 
 void Graph::RemoveNode(Node* node) {
-  std::vector<Node*>::iterator it = std::find(_nodes.begin(), _nodes.end(),
-    node);
+  std::vector<Node*>::iterator it =
+      std::find(_nodes.begin(), _nodes.end(), node);
 
   if (it != _nodes.end()) {
     _nodes.erase(it);
@@ -122,17 +121,16 @@ Edge* Graph::AddEdge(Node* src, Node* dst, const std::string& label) {
 }
 
 void Graph::RemoveEdge(Edge* edge) {
-  std::vector<Edge*>::iterator it = std::find(_edges.begin(), _edges.end(),
-    edge);
+  std::vector<Edge*>::iterator it =
+      std::find(_edges.begin(), _edges.end(), edge);
 
-  if (it != _edges.end())
-    _edges.erase(it);
+  if (it != _edges.end()) _edges.erase(it);
 
   delete edge;
 }
 
 void Graph::PrintNECS(std::ostream& out, unsigned tabDepth) {
-  std::string linePrefix = std::string(tabDepth*_tabIncrement, _tabCharacter);
+  std::string linePrefix = std::string(tabDepth * _tabIncrement, _tabCharacter);
 
   // Default styles.
   if (!_defaultNodeAttributes.Empty()) {
@@ -161,14 +159,14 @@ void Graph::PrintNECS(std::ostream& out, unsigned tabDepth) {
   std::vector<Subgraph*>::iterator sgIt;
   for (sgIt = _subgraphs.begin(); sgIt != _subgraphs.end(); sgIt++) {
     Subgraph* sg = *sgIt;
-    sg->Print(out, tabDepth+1);
+    sg->Print(out, tabDepth + 1);
   }
 
   // Output cluster subgraphs.
   std::vector<Cluster*>::iterator cIt;
   for (cIt = _clusters.begin(); cIt != _clusters.end(); cIt++) {
     Cluster* cluster = *cIt;
-    cluster->Print(out, tabDepth+1);
+    cluster->Print(out, tabDepth + 1);
   }
 
   // Output edges. We do this *after* subgraphs and clusters, since edges

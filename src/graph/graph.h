@@ -55,8 +55,6 @@ class Graph {
   void AddNodesToDotWriterObject(RootGraph &dot_object);
   void AddEdgesToDotWriterObject(RootGraph &dot_object);
   void AddEdgeBetwenNodesToDotWriterObject(int i, int j, RootGraph &dot_object);
-
-  void PRINT();  // !!!
 };
 
 }  // namespace s21

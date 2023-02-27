@@ -9,8 +9,8 @@
 #define DOTWRITER_ATTRIBUTE_H_
 
 #include <algorithm>
-#include <string>
 #include <ostream>
+#include <string>
 #include <vector>
 
 #include "Enums.h"
@@ -21,7 +21,7 @@ namespace DotWriter {
  * Attributes contain an attribute name and a value.
  */
 class Attribute {
-protected:
+ protected:
   /**
    * Print the name of this attribute to the given output stream.
    */
@@ -32,7 +32,7 @@ protected:
    */
   virtual void PrintValue(std::ostream& out) = 0;
 
-public:
+ public:
   Attribute() {}
   virtual ~Attribute() {}
 
@@ -53,55 +53,47 @@ public:
  * and have an AttributeType value.
  */
 class StandardAttribute : public Attribute {
-private:
+ private:
   AttributeType::e _type;
 
-protected:
+ protected:
   virtual void PrintName(std::ostream& out) {
     out << AttributeType::ToString(_type);
   }
 
-public:
+ public:
   /**
    * Constructs an attribute with the given type.
    */
   StandardAttribute(AttributeType::e type) : _type(type) {}
   virtual ~StandardAttribute() {}
 
-  AttributeType::e GetType() {
-    return _type;
-  }
+  AttributeType::e GetType() { return _type; }
 };
 
 /**
  * A custom attribute is just two strings.
  */
 class CustomAttribute : public Attribute {
-private:
+ private:
   std::string _type;
   std::string _value;
 
-protected:
-  virtual void PrintName(std::ostream& out) {
-    out << _type;
-  }
+ protected:
+  virtual void PrintName(std::ostream& out) { out << _type; }
 
-  virtual void PrintValue(std::ostream& out) {
-    out << _value;
-  }
+  virtual void PrintValue(std::ostream& out) { out << _value; }
 
-public:
+ public:
   /**
    * Constructs a custom attribute with the given type and value.
    */
-  CustomAttribute(const std::string& type, const std::string& value) :
-    _type(type), _value(value) {}
+  CustomAttribute(const std::string& type, const std::string& value)
+      : _type(type), _value(value) {}
 
   virtual ~CustomAttribute() {}
 
-  std::string GetName() {
-    return _type;
-  }
+  std::string GetName() { return _type; }
 };
 
 /**
@@ -110,22 +102,17 @@ public:
  */
 template <typename T, typename F>
 class EnumAttribute : public StandardAttribute {
-private:
+ private:
   T _value;
 
-protected:
-  virtual void PrintValue(std::ostream& out) {
-    out << F::ToString(_value);
-  }
+ protected:
+  virtual void PrintValue(std::ostream& out) { out << F::ToString(_value); }
 
-public:
-  EnumAttribute(AttributeType::e type, T value) : StandardAttribute(type),
-    _value(value) {
-  }
+ public:
+  EnumAttribute(AttributeType::e type, T value)
+      : StandardAttribute(type), _value(value) {}
 
-  void SetValue(T value) {
-    _value = value;
-  }
+  void SetValue(T value) { _value = value; }
 };
 
 /**
@@ -134,10 +121,10 @@ public:
  */
 template <typename T, typename F>
 class EnumListAttribute : public StandardAttribute {
-private:
+ private:
   std::vector<T> _values;
 
-protected:
+ protected:
   virtual void PrintValue(std::ostream& out) {
     if (_values.empty()) return;
 
@@ -149,56 +136,50 @@ protected:
       out << F::ToString(currentVal);
 
       // The last value does not need a colon after it.
-      if (it+1 != _values.end())
-        out << ":";
+      if (it + 1 != _values.end()) out << ":";
     }
   }
 
-public:
+ public:
   EnumListAttribute(AttributeType::e type, T value) : StandardAttribute(type) {
     AddValue(value);
   }
 
-  EnumListAttribute(AttributeType::e type, const std::vector<T>& values) :
-    StandardAttribute(type) {
+  EnumListAttribute(AttributeType::e type, const std::vector<T>& values)
+      : StandardAttribute(type) {
     // Copies contents of the input vector.
     _values = values;
   }
 
   void RemoveValue(T value) {
     typename std::vector<T>::iterator loc =
-      std::find(_values.begin(), _values.end(), value);
+        std::find(_values.begin(), _values.end(), value);
 
     if (loc != _values.end()) {
       _values.erase(loc);
     }
   }
 
-  void AddValue(T value) {
-    _values.push_back(value);
-  }
+  void AddValue(T value) { _values.push_back(value); }
 };
 
 /**
  * Used for boolean attributes
  */
 class BoolAttribute : public StandardAttribute {
-private:
+ private:
   bool _value;
 
-protected:
+ protected:
   virtual void PrintValue(std::ostream& out) {
     out << (_value ? "true" : "false");
   }
 
-public:
-  BoolAttribute(AttributeType::e type, bool value) : StandardAttribute(type),
-    _value(value) {
-  }
+ public:
+  BoolAttribute(AttributeType::e type, bool value)
+      : StandardAttribute(type), _value(value) {}
 
-  bool GetValue() {
-    return _value;
-  }
+  bool GetValue() { return _value; }
 };
 
 /**
@@ -206,22 +187,17 @@ public:
  */
 template <typename T>
 class SimpleAttribute : public StandardAttribute {
-private:
+ private:
   T _value;
 
-protected:
-  virtual void PrintValue(std::ostream& out) {
-    out << _value;
-  }
+ protected:
+  virtual void PrintValue(std::ostream& out) { out << _value; }
 
-public:
-  SimpleAttribute(AttributeType::e type, T value) : StandardAttribute(type),
-    _value(value) {
-  }
+ public:
+  SimpleAttribute(AttributeType::e type, T value)
+      : StandardAttribute(type), _value(value) {}
 
-  T GetValue() {
-    return _value;
-  }
+  T GetValue() { return _value; }
 };
 
 /**
@@ -229,10 +205,10 @@ public:
  */
 template <typename T>
 class SimpleListAttribute : public StandardAttribute {
-private:
+ private:
   std::vector<T> _values;
 
-protected:
+ protected:
   virtual void PrintValue(std::ostream& out) {
     if (_values.empty()) return;
 
@@ -244,82 +220,75 @@ protected:
       out << currentVal;
 
       // The last value does not need a colon after it.
-      if (it+1 != _values.end())
-        out << ":";
+      if (it + 1 != _values.end()) out << ":";
     }
   }
 
-public:
-  SimpleListAttribute(AttributeType::e type, T value) : StandardAttribute(type) {
+ public:
+  SimpleListAttribute(AttributeType::e type, T value)
+      : StandardAttribute(type) {
     AddValue(value);
   }
 
-  SimpleListAttribute(AttributeType::e type, const std::vector<T>& values) :
-    StandardAttribute(type) {
+  SimpleListAttribute(AttributeType::e type, const std::vector<T>& values)
+      : StandardAttribute(type) {
     // Copies contents of the input vector.
     _values = values;
   }
 
   void RemoveValue(T value) {
     typename std::vector<T>::iterator loc =
-      std::find(_values.begin(), _values.end(), value);
+        std::find(_values.begin(), _values.end(), value);
 
     if (loc != _values.end()) {
       _values.erase(loc);
     }
   }
 
-  void AddValue(T value) {
-    _values.push_back(value);
-  }
+  void AddValue(T value) { _values.push_back(value); }
 };
 
 class AddDoubleAttribute : public SimpleAttribute<double> {
-protected:
+ protected:
   virtual void PrintValue(std::ostream& out) {
     out << "+";
     SimpleAttribute<double>::PrintValue(out);
   }
 
-public:
-  AddDoubleAttribute(AttributeType::e type, double value) :
-    SimpleAttribute<double>(type, value) {
-  }
+ public:
+  AddDoubleAttribute(AttributeType::e type, double value)
+      : SimpleAttribute<double>(type, value) {}
 };
 
 class PointAttribute : public StandardAttribute {
-private:
+ private:
   double _x, _y;
 
-protected:
-  virtual void PrintValue(std::ostream& out) {
-    out << _x << "," << _y;
-  }
+ protected:
+  virtual void PrintValue(std::ostream& out) { out << _x << "," << _y; }
 
-public:
-  PointAttribute(AttributeType::e type, double x, double y) :
-    StandardAttribute(type), _x(x), _y(y) {
-  }
+ public:
+  PointAttribute(AttributeType::e type, double x, double y)
+      : StandardAttribute(type), _x(x), _y(y) {}
 };
 
 class AddPointAttribute : public PointAttribute {
-protected:
+ protected:
   virtual void PrintValue(std::ostream& out) {
     out << "+";
     PointAttribute::PrintValue(out);
   }
 
-public:
-  AddPointAttribute(AttributeType::e type, double x, double y) :
-    PointAttribute(type, x, y) {
-  }
+ public:
+  AddPointAttribute(AttributeType::e type, double x, double y)
+      : PointAttribute(type, x, y) {}
 };
 
 class PointListAttribute : public StandardAttribute {
-private:
+ private:
   std::vector<std::pair<double, double> > _values;
 
-protected:
+ protected:
   virtual void PrintValue(std::ostream& out) {
     if (_values.empty()) return;
 
@@ -330,20 +299,20 @@ protected:
       out << currentVal.first << "," << currentVal.second;
 
       // The last value does not need a space after it.
-      if (it+1 != _values.end()) {
+      if (it + 1 != _values.end()) {
         out << " ";
       }
     }
   }
 
-public:
-  PointListAttribute(AttributeType::e type, double x, double y) :
-    StandardAttribute(type) {
-    AddPoint(x,y);
+ public:
+  PointListAttribute(AttributeType::e type, double x, double y)
+      : StandardAttribute(type) {
+    AddPoint(x, y);
   }
 
   void AddPoint(double x, double y) {
-    _values.push_back(std::pair<double,double>(x, y));
+    _values.push_back(std::pair<double, double>(x, y));
   }
 };
 

@@ -1,7 +1,7 @@
 #ifndef DOTWRITER_IDABLE_H_
 #define DOTWRITER_IDABLE_H_
 
-#include<string>
+#include <string>
 
 namespace DotWriter {
 
@@ -9,15 +9,13 @@ namespace DotWriter {
  * Interface for idable objects.
  */
 class Idable {
-private:
+ private:
   const std::string& _id;  // Managed by a IdManager created by a RootGraph
 
-public:
-  Idable(const std::string& id) : _id(id) {};
+ public:
+  Idable(const std::string& id) : _id(id){};
 
-  const std::string& GetId() {
-    return _id;
-  }
+  const std::string& GetId() { return _id; }
 };
 
 }  // namespace DotWriter

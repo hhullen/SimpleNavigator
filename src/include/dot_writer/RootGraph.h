@@ -13,26 +13,22 @@
 namespace DotWriter {
 
 class RootGraph : public Graph {
-private:
+ private:
   GraphAttributeSet _attributes;
 
-public:
-  RootGraph(bool isDigraph = false) : Graph(new IdManager(), isDigraph),
-    _attributes(GraphAttributeSet()) {};
-  RootGraph(bool isDigraph, const std::string& label) :
-    Graph(new IdManager(), isDigraph, label), _attributes(GraphAttributeSet())
-  {};
-  RootGraph(bool isDigraph, const std::string& label, std::string id) :
-    Graph(new IdManager(), isDigraph, label, id), _attributes(GraphAttributeSet())
-  {};
+ public:
+  RootGraph(bool isDigraph = false)
+      : Graph(new IdManager(), isDigraph), _attributes(GraphAttributeSet()){};
+  RootGraph(bool isDigraph, const std::string& label)
+      : Graph(new IdManager(), isDigraph, label),
+        _attributes(GraphAttributeSet()){};
+  RootGraph(bool isDigraph, const std::string& label, std::string id)
+      : Graph(new IdManager(), isDigraph, label, id),
+        _attributes(GraphAttributeSet()){};
 
-  virtual ~RootGraph() {
-    delete _idManager;
-  }
+  virtual ~RootGraph() { delete _idManager; }
 
-  GraphAttributeSet& GetAttributes() {
-    return _attributes;
-  }
+  GraphAttributeSet& GetAttributes() { return _attributes; }
 
   /**
    * Writes the graph to the specified filename in the DOT format.

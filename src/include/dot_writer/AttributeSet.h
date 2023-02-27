@@ -16,9 +16,9 @@
 #define DOTWRITER_ATTRIBUTESET_H_
 
 #include <algorithm>
+#include <map>
 #include <ostream>
 #include <stdexcept>
-#include <map>
 
 #include "Attribute.h"
 #include "Enums.h"
@@ -27,41 +27,43 @@
 using std::runtime_error;
 
 /** HELPER MACROS **/
-#define SIMPLE_ATTRIBUTE(ATTYPENAME, GETSETNAME, TYPE) \
-  void Set##GETSETNAME (TYPE val) { \
-    AddSimpleAttribute< TYPE >(AttributeType::ATTYPENAME, val); \
-  } \
-  \
-  SimpleAttribute<TYPE>* Get##GETSETNAME () { \
+#define SIMPLE_ATTRIBUTE(ATTYPENAME, GETSETNAME, TYPE)          \
+  void Set##GETSETNAME(TYPE val) {                              \
+    AddSimpleAttribute<TYPE>(AttributeType::ATTYPENAME, val);   \
+  }                                                             \
+                                                                \
+  SimpleAttribute<TYPE>* Get##GETSETNAME() {                    \
     return GetSimpleAttribute<TYPE>(AttributeType::ATTYPENAME); \
   }
 
-#define STRING_ATTRIBUTE(ATTYPENAME, GETSETNAME) \
-  void Set##GETSETNAME (std::string val) { \
-    val = SanitizeString(val); \
-    AddSimpleAttribute< std::string >(AttributeType::ATTYPENAME, val); \
-  } \
-  \
-  SimpleAttribute<std::string>* Get##GETSETNAME () { \
+#define STRING_ATTRIBUTE(ATTYPENAME, GETSETNAME)                       \
+  void Set##GETSETNAME(std::string val) {                              \
+    val = SanitizeString(val);                                         \
+    AddSimpleAttribute<std::string>(AttributeType::ATTYPENAME, val);   \
+  }                                                                    \
+                                                                       \
+  SimpleAttribute<std::string>* Get##GETSETNAME() {                    \
     return GetSimpleAttribute<std::string>(AttributeType::ATTYPENAME); \
   }
 
-#define BOOL_ATTRIBUTE(ATTYPENAME, GETSETNAME) \
-  void Set##GETSETNAME (bool val) { \
-    AddBoolAttribute(AttributeType::ATTYPENAME, val); \
-  } \
-  \
-  BoolAttribute* Get##GETSETNAME () { \
+#define BOOL_ATTRIBUTE(ATTYPENAME, GETSETNAME)          \
+  void Set##GETSETNAME(bool val) {                      \
+    AddBoolAttribute(AttributeType::ATTYPENAME, val);   \
+  }                                                     \
+                                                        \
+  BoolAttribute* Get##GETSETNAME() {                    \
     return GetBoolAttribute(AttributeType::ATTYPENAME); \
   }
 
-#define ENUM_ATTRIBUTE(ATTYPENAME, GETSETNAME, ENUMTYPENAME) \
-  void Set##GETSETNAME (ENUMTYPENAME::e val) { \
-    AddEnumAttribute<ENUMTYPENAME::e, ENUMTYPENAME>(AttributeType::ATTYPENAME, val); \
-  } \
-  \
-  EnumAttribute<ENUMTYPENAME::e, ENUMTYPENAME>* Get##GETSETNAME () { \
-    return GetEnumAttribute<ENUMTYPENAME::e, ENUMTYPENAME>(AttributeType::ATTYPENAME); \
+#define ENUM_ATTRIBUTE(ATTYPENAME, GETSETNAME, ENUMTYPENAME)                   \
+  void Set##GETSETNAME(ENUMTYPENAME::e val) {                                  \
+    AddEnumAttribute<ENUMTYPENAME::e, ENUMTYPENAME>(AttributeType::ATTYPENAME, \
+                                                    val);                      \
+  }                                                                            \
+                                                                               \
+  EnumAttribute<ENUMTYPENAME::e, ENUMTYPENAME>* Get##GETSETNAME() {            \
+    return GetEnumAttribute<ENUMTYPENAME::e, ENUMTYPENAME>(                    \
+        AttributeType::ATTYPENAME);                                            \
   }
 
 #define DOUBLE_ATTRIBUTE(ATTYPENAME, GETSETNAME) \
@@ -77,7 +79,7 @@ namespace DotWriter {
 
 class Node;
 class AttributeSet {
-private:
+ private:
   std::map<AttributeType::e, StandardAttribute*> _standardAttributes;
   std::map<std::string, CustomAttribute*> _customAttributes;
 
@@ -97,15 +99,14 @@ private:
     return NULL;
   }
 
-public:
-  AttributeSet() {
-  }
+ public:
+  AttributeSet() {}
 
   virtual ~AttributeSet() {
     {
       std::map<AttributeType::e, StandardAttribute*>::iterator it;
       for (it = _standardAttributes.begin(); it != _standardAttributes.end();
-        it++) {
+           it++) {
         delete it->second;
       }
     }
@@ -113,7 +114,7 @@ public:
     {
       std::map<std::string, CustomAttribute*>::iterator it;
       for (it = _customAttributes.begin(); it != _customAttributes.end();
-        it++) {
+           it++) {
         delete it->second;
       }
     }
@@ -130,11 +131,11 @@ public:
   }
 
   virtual void Print(std::ostream& out, const std::string& prefix = "",
-    const std::string& postfix = ", ") {
+                     const std::string& postfix = ", ") {
     {
       std::map<AttributeType::e, StandardAttribute*>::iterator it;
       for (it = _standardAttributes.begin(); it != _standardAttributes.end();
-        it++) {
+           it++) {
         Attribute* at = it->second;
         out << prefix;
         at->Print(out);
@@ -151,20 +152,19 @@ public:
     {
       std::map<std::string, CustomAttribute*>::iterator it;
       for (it = _customAttributes.begin(); it != _customAttributes.end();
-        it++) {
+           it++) {
         Attribute* at = it->second;
         out << prefix;
         at->Print(out);
 
-        if (++it != _customAttributes.end())
-          out << postfix;
+        if (++it != _customAttributes.end()) out << postfix;
 
         it--;
       }
     }
   }
 
-protected:
+ protected:
   void AddAttribute(StandardAttribute* attribute) {
     AttributeType::e key = attribute->GetType();
     if (_standardAttributes.find(key) != _standardAttributes.end())
@@ -191,47 +191,47 @@ protected:
     return static_cast<BoolAttribute*>(attr);
   }
 
-  template<typename T>
+  template <typename T>
   void AddSimpleAttribute(AttributeType::e type, T val) {
     StandardAttribute* attr = new SimpleAttribute<T>(type, val);
     AddAttribute(attr);
   }
 
-  template<typename T>
+  template <typename T>
   SimpleAttribute<T>* GetSimpleAttribute(AttributeType::e type) {
     Attribute* at = GetAttribute(type);
-    return static_cast< SimpleAttribute<T>* >(at);
+    return static_cast<SimpleAttribute<T>*>(at);
   }
 
-  template<typename T>
+  template <typename T>
   void AddSimpleListAttribute(AttributeType::e type,
-    const std::vector<T>& vals) {
+                              const std::vector<T>& vals) {
     StandardAttribute* attr = new SimpleListAttribute<T>(type, vals);
     AddAttribute(attr);
   }
 
-  template<typename T, typename F>
+  template <typename T, typename F>
   void AddEnumAttribute(AttributeType::e type, T val) {
     StandardAttribute* attr = new EnumAttribute<T, F>(type, val);
     AddAttribute(attr);
   }
 
-  template<typename T, typename F>
-  EnumAttribute<T,F>* GetEnumAttribute(AttributeType::e type) {
+  template <typename T, typename F>
+  EnumAttribute<T, F>* GetEnumAttribute(AttributeType::e type) {
     Attribute* attr = GetAttribute(type);
-    return static_cast< EnumAttribute<T,F>* >(attr);
+    return static_cast<EnumAttribute<T, F>*>(attr);
   }
 
-  template<typename T, typename F>
+  template <typename T, typename F>
   void AddEnumListAttribute(AttributeType::e type, const std::vector<T>& val) {
     StandardAttribute* attr = new EnumListAttribute<T, F>(type, val);
     AddAttribute(attr);
   }
 
-  template<typename T, typename F>
-  EnumListAttribute<T,F>* GetEnumListAttribute(AttributeType::e type) {
+  template <typename T, typename F>
+  EnumListAttribute<T, F>* GetEnumListAttribute(AttributeType::e type) {
     Attribute* attr = GetAttribute(type);
-    return static_cast< EnumListAttribute<T,F>* >(attr);
+    return static_cast<EnumListAttribute<T, F>*>(attr);
   }
 
   void AddPointAttribute(AttributeType::e type, double x, double y) {
@@ -266,13 +266,13 @@ protected:
 };
 
 class GraphAttributeSet : public AttributeSet {
-public:
+ public:
   virtual void Print(std::ostream& out, const std::string& prefix = "",
-    const std::string& postfix = ";\n") {
+                     const std::string& postfix = ";\n") {
     AttributeSet::Print(out, prefix, postfix);
   }
 
-  GraphAttributeSet() { };
+  GraphAttributeSet(){};
 
   /**
    * Factor damping force motions. On each iteration, a nodes movement is
@@ -609,9 +609,7 @@ public:
   /**
    * Label position, in points. The position indicates the center of the label.
    */
-  void SetLP(double x, double y) {
-    AddPointAttribute(AttributeType::LP, x, y);
-  }
+  void SetLP(double x, double y) { AddPointAttribute(AttributeType::LP, x, y); }
 
   /**
    * Width of graph or cluster label, in inches.
@@ -852,12 +850,8 @@ public:
    * For layouts which always do packing, such as twopi, the pack attribute is
    * just used to set the margin.
    */
-  void SetPack(bool val) {
-    AddBoolAttribute(AttributeType::PACK, val);
-  }
-  void SetPack(int val) {
-    AddSimpleAttribute<int>(AttributeType::PACK, val);
-  }
+  void SetPack(bool val) { AddBoolAttribute(AttributeType::PACK, val); }
+  void SetPack(int val) { AddSimpleAttribute<int>(AttributeType::PACK, val); }
 
   /**
    * This indicates how connected components should be packed. Note that
@@ -1085,9 +1079,7 @@ public:
    * the scaling. If only a single number is given, this is used for both
    * factors.
    */
-  void SetScale(double val) {
-    SetScale(val, val);
-  }
+  void SetScale(double val) { SetScale(val, val); }
   void SetScale(double x, double y) {
     AddPointAttribute(AttributeType::SCALE, x, y);
   }
@@ -1270,21 +1262,20 @@ public:
   BOOL_ATTRIBUTE(TRUECOLOR, TrueColor)
 
   // TODO(jvilk): Implement this type.
-  //void SetViewPort(ViewPort val);
+  // void SetViewPort(ViewPort val);
 
   /**
    * Factor to scale up drawing to allow margin for expansion in Voronoi
    * technique. dim' = (1+2*margin)*dim.
    */
   DOUBLE_ATTRIBUTE(VORO_MARGIN, VoroMargin)
-
 };
 
 class SubgraphAttributeSet : public AttributeSet {
-public:
-  SubgraphAttributeSet() { };
+ public:
+  SubgraphAttributeSet(){};
   virtual void Print(std::ostream& out, const std::string& prefix = "",
-    const std::string& postfix = ";\n") {
+                     const std::string& postfix = ";\n") {
     AttributeSet::Print(out, prefix, postfix);
   }
 
@@ -1292,11 +1283,11 @@ public:
 };
 
 class ClusterAttributeSet : public AttributeSet {
-public:
-  ClusterAttributeSet() { };
+ public:
+  ClusterAttributeSet(){};
 
   virtual void Print(std::ostream& out, const std::string& prefix = "",
-    const std::string& postfix = ";\n") {
+                     const std::string& postfix = ";\n") {
     AttributeSet::Print(out, prefix, postfix);
   }
 
@@ -1485,9 +1476,7 @@ public:
   /**
    * Label position, in points. The position indicates the center of the label.
    */
-  void SetLP(double x, double y) {
-    AddPointAttribute(AttributeType::LP, x, y);
-  }
+  void SetLP(double x, double y) { AddPointAttribute(AttributeType::LP, x, y); }
 
   /**
    * Width of graph or cluster label, in inches.
@@ -1613,11 +1602,11 @@ public:
 };
 
 class NodeAttributeSet : public AttributeSet {
-private:
+ private:
   std::vector<Attribute*> _attributes;
 
-public:
-  NodeAttributeSet() { };
+ public:
+  NodeAttributeSet(){};
 
   /**
    * Hyperlinks incorporated into device-dependent output. At present, used in
@@ -1817,7 +1806,7 @@ public:
    */
   void SetImageScale(ImageScaleType::e val) {
     AddEnumAttribute<ImageScaleType::e, ImageScaleType>(
-      AttributeType::IMAGESCALE, val);
+        AttributeType::IMAGESCALE, val);
   }
   void SetImageScale(bool val) {
     AddBoolAttribute(AttributeType::IMAGESCALE, val);
@@ -2060,7 +2049,7 @@ public:
   STRING_ATTRIBUTE(TOOLTIP, Tooltip)
 
   // TODO(jvilk): Implement this.
-  //SetVertices
+  // SetVertices
 
   /**
    * Width of node, in inches. This is taken as the initial, minimum width of
@@ -2093,8 +2082,8 @@ public:
 };
 
 class EdgeAttributeSet : public AttributeSet {
-public:
-  EdgeAttributeSet() { };
+ public:
+  EdgeAttributeSet(){};
 
   /**
    * Hyperlinks incorporated into device-dependent output. At present, used in
@@ -2375,9 +2364,7 @@ public:
   /**
    * Label position, in points. The position indicates the center of the label.
    */
-  void SetLP(double x, double y) {
-    AddPointAttribute(AttributeType::LP, x, y);
-  }
+  void SetLP(double x, double y) { AddPointAttribute(AttributeType::LP, x, y); }
 
   /**
    * Logical tail of an edge. When compound is true, if ltail is defined and is
@@ -2566,6 +2553,6 @@ public:
   STRING_ATTRIBUTE(XLABEL, XLabel)
 };
 
-}  //namespace DotWriter
+}  // namespace DotWriter
 
 #endif

@@ -6,15 +6,15 @@
 #ifndef DOTWRITER_DOTWRITER_H_
 #define DOTWRITER_DOTWRITER_H_
 
+#include "Attribute.h"
+#include "AttributeSet.h"
+#include "Cluster.h"
+#include "Edge.h"
 #include "Enums.h"
 #include "Graph.h"
-#include "Edge.h"
+#include "Idable.h"
 #include "Node.h"
 #include "RootGraph.h"
 #include "Subgraph.h"
-#include "Cluster.h"
-#include "AttributeSet.h"
-#include "Attribute.h"
-#include "Idable.h"
 
 #endif
