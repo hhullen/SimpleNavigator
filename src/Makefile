@@ -11,9 +11,10 @@ TEST_FLAGS=-lgtest -pthread -lgtest_main
 CLANG_FILE=.clang-format
 CLANG_FILE_WAY=..$(SEP)materials$(SEP)linters$(SEP)$(CLANG_FILE)
 CHECK_FILES=$(GRAPH_DIR)$(SEP)*
-CPPCH_SETUP=--enable=warning,performance,portability  -v --language=c++ $(STD)
+CPPCH_SETUP=--enable=warning,performance,portability -v --language=c++ $(STD)
 BUILD_DIR=..$(SEP)build
-TO_DELETE_FILES=*.o *.out *.dSYM *.gch .DS_Store $(EXECUTABLE) $(CLANG_FILE) dot_test.dot
+TO_DELETE_FILES=*.o *.out *.dSYM *.gch .DS_Store $(EXECUTABLE) $(CLANG_FILE) \
+				dot_test.dot s21_graph.a s21_graph_algorithms.a
 TO_DELETE_FOLDERS=$(BUILD_DIR)
 
 #Crossplatform specs
@@ -46,6 +47,10 @@ endif
 all: clean tests
 
 s21_graph.a:
+	$(COMPILER) $(STD) -c $(GRAPH_BUILD_FILES) -I $(INCLUDE_DIR)
+	ar cr s21_graph.a *.o
+	ranlib s21_graph.a
+	$(DELETE_FILE) *.o
 
 s21_graph_algorithms.a:
 
@@ -56,7 +61,7 @@ check:
 	clang-format -n --style=Google $(CHECK_FILES)
 
 tests: clean
-	$(COMPILER) $(STD) $(TESTBUILD_FILES) -o $(EXECUTABLE) $(TEST_FLAGS) -I $(INCLUDE_DIR)
+	$(COMPILER) $(STD) $(TESTBUILD_FILES) $(TEST_FLAGS) -I $(INCLUDE_DIR) -o $(EXECUTABLE)
 	./$(EXECUTABLE)
 
 clean:
