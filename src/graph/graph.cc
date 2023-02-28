@@ -63,16 +63,8 @@ void Graph::ReadAdjacencyMatrix() {
   string line;
   int row = 0;
   while (getline(*input_file_, line, '\n') && row < get_size()) {
-    IsLineCorrect(line);
     ReadLineToMatrixRow(line, row);
     ++row;
-  }
-}
-
-void Graph::IsLineCorrect(string &line) {
-  if (line.size() * 2 < get_size()) {
-    input_file_->close();
-    throw invalid_argument("Incorrect matrix row");
   }
 }
 
@@ -89,11 +81,9 @@ void Graph::ReadLineToMatrixRow(string &line, int row) {
 void Graph::ShiftToNextNumber(string &line, size_t *i) {
   while (isdigit(line.data()[*i]) && *i < line.size()) {
     ++(*i);
-    char *number = &(line.data())[*i];
   }
   while (!isdigit(line.data()[*i]) && *i < line.size()) {
     ++(*i);
-    char *number = &(line.data())[*i];
   }
   --(*i);
 }
@@ -128,7 +118,7 @@ void Graph::WriteDotWriterObject(const string &graph_name) {
 
 void Graph::AddNodesToDotWriterObject(RootGraph &dot_object) {
   size_t size = get_size();
-  for (int i = 1; i <= size; ++i) {
+  for (size_t i = 1; i <= size; ++i) {
     string name = to_string(i);
     Node *node = dot_object.AddNode("", name);
     nodes_.push_back(node);

@@ -18,7 +18,7 @@ TEST(graph_tests, resizing) {
 TEST(graph_tests, loading) {
   Graph gg;
   EXPECT_THROW(gg.LoadGraphFromFile(""), invalid_argument);
-  EXPECT_THROW(gg.LoadGraphFromFile("tests/graph_example_bad.txt"),
+  EXPECT_THROW(gg.LoadGraphFromFile("tests/graph_example_bad_size.txt"),
                invalid_argument);
   EXPECT_NO_THROW(gg.LoadGraphFromFile("tests/graph_example.txt"));
   EXPECT_EQ(gg.get_size(), 11);

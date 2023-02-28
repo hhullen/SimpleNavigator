@@ -48,7 +48,6 @@ class Graph {
   void IsOutputFileOpened();
   void ReadAdjacencyMatrixSize();
   void ReadAdjacencyMatrix();
-  void IsLineCorrect(string &line);
   void ReadLineToMatrixRow(string &line, int row);
   void ShiftToNextNumber(string &line, size_t *i);
   void WriteDotWriterObject(const string &graph_name);
