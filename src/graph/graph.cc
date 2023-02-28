@@ -137,8 +137,6 @@ void Graph::AddEdgesToDotWriterObject(RootGraph &dot_object) {
 void Graph::AddEdgeBetwenNodesToDotWriterObject(int i, int j,
                                                 RootGraph &dot_object) {
   if (i != j) {
-    string name_i = to_string(i);
-    string name_j = to_string(j);
     Node *node_i = nodes_[i];
     Node *node_j = nodes_[j];
     Edge *edge = dot_object.AddEdge(node_i, node_j);

@@ -14,7 +14,7 @@ TEST_FLAGS=-lgtest -pthread -lgtest_main
 CLANG_FILE=.clang-format
 CLANG_FILE_WAY=..$(SEP)materials$(SEP)linters$(SEP)$(CLANG_FILE)
 CHECK_FILES=$(GRAPH_DIR)$(SEP)* $(ALGORITHMS_DIR)$(SEP)*
-CPPCH_SETUP=--enable=warning,performance,portability -v --language=c++ $(STD)
+CPPCH_SETUP=--enable=all --suppress=missingInclude --suppress=unusedFunction -v --language=c++ $(STD)
 BUILD_DIR=..$(SEP)build
 TO_DELETE_FILES=*.o *.out *.dSYM *.gch .DS_Store $(EXECUTABLE) $(CLANG_FILE) \
 				dot_test.dot libs21_graph.a libs21_graph_algorithms.a libdot.a
@@ -74,7 +74,8 @@ check:
 	clang-format -n --style=Google $(CHECK_FILES)
 
 tests: dotlib.a s21_graph.a s21_graph_algorithms.a
-	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) $(TESTBUILD_FILES) $(TEST_FLAGS) -I $(INCLUDE_DIR) -L. -ldot -ls21_graph -ls21_graph_algorithms -o $(EXECUTABLE)
+	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) $(TESTBUILD_FILES) $(TEST_FLAGS) \
+	-I $(INCLUDE_DIR) -L. -ldot -ls21_graph -ls21_graph_algorithms -o $(EXECUTABLE)
 	.$(SEP)$(EXECUTABLE)
 
 clean:
