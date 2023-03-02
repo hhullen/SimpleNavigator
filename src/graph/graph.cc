@@ -8,27 +8,19 @@ Graph::Graph(int size) : input_file_(nullptr), output_file_(nullptr) {
   Resize(size);
 }
 
-Graph::~Graph() {
-  adjacency_matrix_.clear();
-  adjacency_matrix_.shrink_to_fit();
-}
+Graph::~Graph() { matrix_.Clear(); }
 
-int &Graph::operator()(int i, int j) { return adjacency_matrix_[i][j]; }
+int &Graph::operator()(int i, int j) { return matrix_(i, j); }
 
 void Graph::Resize(int size) {
   if (size < 1) {
     throw invalid_argument("Incorrect adjacency matrix size.");
   }
 
-  adjacency_matrix_.resize(size);
-  adjacency_matrix_.shrink_to_fit();
-  for (vector<int> &row : adjacency_matrix_) {
-    row.resize(size);
-    row.shrink_to_fit();
-  }
+  matrix_.Resize(size);
 }
 
-int Graph::get_size() { return adjacency_matrix_.size(); }
+size_t Graph::get_size() { return matrix_.Size(); }
 
 void Graph::LoadGraphFromFile(const string &path) {
   ifstream file(path);
@@ -62,7 +54,8 @@ void Graph::ReadAdjacencyMatrixSize() {
 void Graph::ReadAdjacencyMatrix() {
   string line;
   int row = 0;
-  while (getline(*input_file_, line, '\n') && row < get_size()) {
+  int size = static_cast<int>(get_size());
+  while (getline(*input_file_, line, '\n') && row < size) {
     ReadLineToMatrixRow(line, row);
     ++row;
   }
@@ -72,7 +65,7 @@ void Graph::ReadLineToMatrixRow(string &line, int row) {
   int col = 0;
   for (size_t i = 0; i < line.size(); ++i) {
     char *number = &(line.data())[i];
-    adjacency_matrix_[row][col] = atoi(number);
+    matrix_(row, col) = atoi(number);
     ++col;
     ShiftToNextNumber(line, &i);
   }

@@ -7,6 +7,9 @@ GRAPH_BUILD_FILES=$(GRAPH_DIR)$(SEP)graph.cc
 ALGORITHMS_BUILD_FILES=$(ALGORITHMS_DIR)$(SEP)graph_algorithms.cc
 TESTBUILD_FILES=$(TEST_DIR)$(SEP)$(MAIN_PROJ_NAME)_tests.cc
 EXECUTABLE=$(MAIN_PROJ_NAME)_test.out
+ALGORITHMS_LIB=s21_graph_algorithms
+GRAPH_LIB=s21_graph
+DOT_LIB=dotlib
 COMPILER=g++
 STD=--std=c++17
 CODE_DIAG_FLAGS=-Wall -Wextra -Werror -Wpedantic
@@ -17,7 +20,7 @@ CHECK_FILES=$(GRAPH_DIR)$(SEP)* $(ALGORITHMS_DIR)$(SEP)*
 CPPCH_SETUP=--enable=all --suppress=missingInclude --suppress=unusedFunction -v --language=c++ $(STD)
 BUILD_DIR=..$(SEP)build
 TO_DELETE_FILES=*.o *.out *.dSYM *.gch .DS_Store $(EXECUTABLE) $(CLANG_FILE) \
-				dot_test.dot libs21_graph.a libs21_graph_algorithms.a libdot.a
+				dot_test.dot lib$(GRAPH_LIB).a lib$(ALGORITHMS_LIB).a lib$(DOT_LIB).a
 TO_DELETE_FOLDERS=$(BUILD_DIR)
 
 #Crossplatform specs
@@ -47,24 +50,26 @@ ifeq ($(OS), Darwin)
 	COPY=cp
 endif
 
+.PHONY: all check tests clean
+
 all: clean tests
 
-s21_graph.a:
+$(GRAPH_LIB).a:
 	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -c $(GRAPH_BUILD_FILES) -I $(INCLUDE_DIR)
-	ar cr libs21_graph.a *.o
-	ranlib libs21_graph.a
+	ar cr lib$(GRAPH_LIB).a *.o
+	ranlib lib$(GRAPH_LIB).a
 	$(DELETE_FILE) *.o
 
-s21_graph_algorithms.a:
+$(ALGORITHMS_LIB).a:
 	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -c $(ALGORITHMS_BUILD_FILES) -I $(INCLUDE_DIR)
-	ar cr libs21_graph_algorithms.a *.o
-	ranlib libs21_graph_algorithms.a
+	ar cr lib$(ALGORITHMS_LIB).a *.o
+	ranlib lib$(ALGORITHMS_LIB).a
 	$(DELETE_FILE) *.o
 
-dotlib.a:
+$(DOT_LIB).a:
 	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -c $(INCLUDE_DIR)$(SEP)dot_writer/*.cpp
-	ar cr libdot.a *.o
-	ranlib libdot.a
+	ar cr lib$(DOT_LIB).a *.o
+	ranlib lib$(DOT_LIB).a
 	$(DELETE_FILE) *.o
 
 check:
@@ -73,9 +78,9 @@ check:
 	clang-format -i --style=Google $(CHECK_FILES)
 	clang-format -n --style=Google $(CHECK_FILES)
 
-tests: dotlib.a s21_graph.a s21_graph_algorithms.a
+tests: $(DOT_LIB).a $(GRAPH_LIB).a $(ALGORITHMS_LIB).a
 	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) $(TESTBUILD_FILES) $(TEST_FLAGS) \
-	-I $(INCLUDE_DIR) -L. -ldot -ls21_graph -ls21_graph_algorithms -o $(EXECUTABLE)
+	-I $(INCLUDE_DIR) -L. -l$(DOT_LIB) -l$(GRAPH_LIB) -l$(ALGORITHMS_LIB) -o $(EXECUTABLE)
 	.$(SEP)$(EXECUTABLE)
 
 clean:

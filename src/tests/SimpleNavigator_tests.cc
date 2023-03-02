@@ -3,6 +3,7 @@
 #include "../graph/graph.h"
 
 using s21::Graph;
+using std::invalid_argument;
 
 TEST(graph_tests, constructing) { EXPECT_NO_THROW(Graph gg); }
 

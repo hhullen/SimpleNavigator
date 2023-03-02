@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+namespace s21 {
+
 using DotWriter::Edge;
 using DotWriter::EdgeAttributeSet;
 using DotWriter::Node;
@@ -22,7 +24,28 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-namespace s21 {
+class AdjacencyMatrix {
+ public:
+  void Clear() {
+    matrix_.clear();
+    matrix_.shrink_to_fit();
+  }
+
+  void Resize(int size) {
+    matrix_.resize(size);
+    matrix_.shrink_to_fit();
+    for (vector<int> &row : matrix_) {
+      row.resize(size);
+      row.shrink_to_fit();
+    }
+  }
+
+  size_t Size() { return matrix_.size(); }
+  int &operator()(int i, int j) { return matrix_[i][j]; }
+
+ private:
+  vector<vector<int>> matrix_;
+};
 
 class Graph {
  public:
@@ -33,13 +56,13 @@ class Graph {
   int &operator()(int i, int j);
 
   void Resize(int size);
-  int get_size();
+  size_t get_size();
   void LoadGraphFromFile(const string &path);
   void ExportGraphToDot(const string &path,
                         const string &graph_name = "somegraph");
 
  private:
-  vector<vector<int>> adjacency_matrix_;
+  AdjacencyMatrix matrix_;
   ifstream *input_file_;
   ofstream *output_file_;
   vector<Node *> nodes_;
