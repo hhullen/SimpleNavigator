@@ -20,6 +20,7 @@ using std::ifstream;
 using std::invalid_argument;
 using std::isdigit;
 using std::ofstream;
+using std::ostream;
 using std::string;
 using std::to_string;
 using std::vector;
