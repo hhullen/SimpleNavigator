@@ -7,13 +7,17 @@ TsmResult TSPAlgorithm::Solve(Graph &graph) {
   pheromones_.Resize(size);
   attended_.clear();
   for (size_t i = 0; i < size; ++i) {
+    attended_.push_back(i);
     RunThroughGraphFromVertex(graph, i);
+    attended_.clear();
   }
   return result_;
 }
 
 void TSPAlgorithm::RunThroughGraphFromVertex(Graph &graph, size_t i) {
   size_t size = graph.get_size();
+  //   while (attended_.size() < size) {
+  //   }
   vector<float> probabilities_;
   float denominator = 0;
   for (size_t j = 0; j < size; ++j) {
@@ -24,12 +28,13 @@ void TSPAlgorithm::RunThroughGraphFromVertex(Graph &graph, size_t i) {
       probabilities_.push_back(probability);
       denominator += probability;
     }
-    // attended_.push_back(j);
-    // RECURSIVE?????????????????????????
+    attended_.push_back(j);
   }
+  CalculateProbabilities(probabilities_, denominator);
   for (size_t k = 0; k < probabilities_.size(); ++k) {
-    probabilities_[k] /= denominator;
+    probabilities_[k] = probabilities_[k] / denominator * 100;
   }
+  int
 }
 
 bool TSPAlgorithm::IsAttended(int j) {
@@ -39,5 +44,8 @@ bool TSPAlgorithm::IsAttended(int j) {
 float TSPAlgorithm::CalculateNumerator(int pheromone, int edge_length) {
   return powf(pheromone, alpha_) + powf(edge_length, beta_);
 }
+
+void TSPAlgorithm::CalculateProbabilities(vector<float> &probabilities,
+                                          float denominator) {}
 
 }  // namespace s21

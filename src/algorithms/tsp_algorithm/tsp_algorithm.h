@@ -34,6 +34,8 @@ class TSPAlgorithm {
   static void RunThroughGraphFromVertex(Graph &graph, size_t i);
   static bool IsAttended(int j);
   static float CalculateNumerator(int pheromone, int edge_length);
+  static void CalculateProbabilities(vector<float> &probabilities,
+                                     float denominator);
 };
 
 }  // namespace s21
