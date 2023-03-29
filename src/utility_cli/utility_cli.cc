@@ -35,21 +35,30 @@ void UtilityCLI::Exec() {
 }
 
 void UtilityCLI::InitializeGraph() {
-  string file_path = GetInputFilePath();
+  string file_path = GetOptionParameterIfExists(
+      "-f", "No input graph file specified. For instance: -f path/to/file.");
   graph_.LoadGraphFromFile(file_path);
 }
 
-string UtilityCLI::GetInputFilePath() {
-  string file_path;
-  if (arguments_.find("-f") == arguments_.end()) {
-    throw invalid_argument("No input graph file specified");
+string UtilityCLI::GetOptionParameterIfExists(string option,
+                                              string exception_message) {
+  if (arguments_.find(option) == arguments_.end()) {
+    throw invalid_argument(exception_message);
   }
 
-  return arguments_.find("-f")->second;
+  return arguments_.find(option)->second;
 }
 
 void UtilityCLI::RunAlgorithm() {}
 
-void UtilityCLI::WriteOutFile() {}
+void UtilityCLI::WriteOutFile() {
+  string file_path;
+  try {
+    file_path = GetOptionParameterIfExists("-o");
+  } catch (...) {
+    return;
+  }
+  graph_.ExportGraphToDot(file_path);
+}
 
 }  // namespace s21

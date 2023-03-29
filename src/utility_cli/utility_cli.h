@@ -37,7 +37,8 @@ class UtilityCLI {
   void CheckNextPresence(int i, int argc, string& arg);
 
   void InitializeGraph();
-  string GetInputFilePath();
+  string GetOptionParameterIfExists(string option,
+                                    string exception_message = "");
   void RunAlgorithm();
   void WriteOutFile();
 };
