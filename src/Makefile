@@ -86,3 +86,6 @@ tests: $(DOT_LIB).a $(GRAPH_LIB).a $(ALGORITHMS_LIB).a
 clean:
 	$(DELETE_FOLDER) $(TO_DELETE_FOLDERS)
 	$(DELETE_FILE) $(TO_DELETE_FILES)
+
+t:
+	g++ --std=c++17 main.cc utility_cli/utility_cli.cc graph/graph.cc algorithms/graph_algorithms.cc -L . -ldotlib -I include

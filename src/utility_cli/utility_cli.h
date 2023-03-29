@@ -26,12 +26,20 @@ class UtilityCLI {
   void Exec();
 
  private:
-  struct Options {
-    string name;
-  };
-  vector<Options> options_;
+  map<string, string> arguments_;
 
-  void InitializeFeatures();
+  Graph graph_;
+  int start_vertex_;
+  int end_vertex_;
+
+  void ReadArguments(int argc, char* argv[]);
+  bool IsOption(string& arg);
+  void CheckNextPresence(int i, int argc, string& arg);
+
+  void InitializeGraph();
+  string GetInputFilePath();
+  void RunAlgorithm();
+  void WriteOutFile();
 };
 
 }  // namespace s21
