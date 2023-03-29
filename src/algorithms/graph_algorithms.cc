@@ -3,6 +3,7 @@
 namespace s21 {
 
 GraphAlgorithms::GraphAlgorithms() {}
+
 vector<int> GraphAlgorithms::depthFirstSearch(Graph &graph, int startVertex) {
   vector<int> result;
   vector<bool> visited;
@@ -98,4 +99,9 @@ Graph GraphAlgorithms::getShortestPathsBetweenAllVertices(Graph &graph) {
   }
   return result;
 }
-} // namespace s21
+
+TsmResult GraphAlgorithms::solveTravelingSalesmanProblem(Graph &graph) {
+  return TSPAlgorithm::Solve(graph);
+}
+
+}  // namespace s21

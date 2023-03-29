@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-namespace hhullen {
+namespace s21 {
 
 template <class T>
 class queue {
@@ -136,7 +136,7 @@ void queue<value_type>::pop() {
 }
 
 template <class value_type>
-void queue<value_type>::swap(hhullen::queue<value_type> &other) {
+void queue<value_type>::swap(s21::queue<value_type> &other) {
   Node *head_buffer = other.head_;
   Node *tail_buffer = other.tail_;
   size_type temp_size = other.size_;
@@ -174,6 +174,6 @@ void queue<T>::emplace_back(Args &&...args) {
   }
 }
 
-}  // namespace hhullen
+}  // namespace s21
 
 #endif  // SRC_INCLUDE_QUEUE_H_

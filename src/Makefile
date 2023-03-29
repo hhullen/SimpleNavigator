@@ -87,5 +87,9 @@ clean:
 	$(DELETE_FOLDER) $(TO_DELETE_FOLDERS)
 	$(DELETE_FILE) $(TO_DELETE_FILES)
 
-t:
-	g++ --std=c++17 main.cc utility_cli/utility_cli.cc graph/graph.cc algorithms/graph_algorithms.cc -L . -ldotlib -I include
+t: libdotlib.a libs21_graph.a
+	g++ --std=c++17 main.cc utility_cli/utility_cli.cc \
+					algorithms/graph_algorithms.cc \
+					algorithms/tsp_algorithm/tsp_algorithm.cc \
+					-L . -ldotlib -ls21_graph -I include
+	./a.out -f tests/graph_example.txt -m TSP

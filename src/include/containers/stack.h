@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-namespace hhullen {
+namespace s21 {
 
 template <class T>
 class stack {
@@ -120,7 +120,7 @@ void stack<value_type>::pop() {
 }
 
 template <class value_type>
-void stack<value_type>::swap(hhullen::stack<value_type> &other) {
+void stack<value_type>::swap(s21::stack<value_type> &other) {
   Node *buffer = other.top_node_;
   size_type temp_size = other.size_;
   other.top_node_ = top_node_;
@@ -148,6 +148,6 @@ void stack<T>::emplace_front(Args &&...args) {
   }
 }
 
-}  // namespace hhullen
+}  // namespace s21
 
 #endif  // SRC_INCLUDE_STACK_H_

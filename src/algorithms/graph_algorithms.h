@@ -1,23 +1,26 @@
 #ifndef SRC_ALGORITHMS_GRAPH_ALGORITHMS_H_
 #define SRC_ALGORITHMS_GRAPH_ALGORITHMS_H_
-#include "../graph/graph.h"
-#include "../include/containers/queue.h"
-#include "../include/containers/stack.h"
+
+#include <containers/queue.h>
+#include <containers/stack.h>
+
 #include <climits>
+
+#include "../graph/graph.h"
+#include "tsp_algorithm/tsp_algorithm.h"
+
 namespace s21 {
 
 class GraphAlgorithms {
-public:
+ public:
   GraphAlgorithms();
   vector<int> depthFirstSearch(Graph &graph, int startVertex);
   vector<int> breadthFirstSearch(Graph &graph, int startVertex);
   int getShortestPathBetweenVertices(Graph &graph, int vertex1, int vertex2);
   Graph getShortestPathsBetweenAllVertices(Graph &graph);
-
-private:
-  //   Graph graph_;
+  TsmResult solveTravelingSalesmanProblem(Graph &graph);
 };
 
-} // namespace s21
+}  // namespace s21
 
-#endif // SRC_ALGORITHMS_GRAPH_ALGORITHMS_H_
+#endif  // SRC_ALGORITHMS_GRAPH_ALGORITHMS_H_
