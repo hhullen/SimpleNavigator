@@ -85,6 +85,7 @@ void UtilityCLI::LST() {}
 void UtilityCLI::TSP() {
   std::cout << "TSP RUN\n";
   TsmResult result = algorithms_.solveTravelingSalesmanProblem(graph_);
+  std::cout << result.distance << "\n";
 }
 
 void UtilityCLI::WriteOutFile() {

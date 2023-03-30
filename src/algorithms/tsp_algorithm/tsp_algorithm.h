@@ -9,7 +9,8 @@
 #include "../../graph/graph.h"
 
 using std::find;
-using std::powf;
+using std::pair;
+using std::pow;
 using std::rand;
 using std::vector;
 
@@ -17,25 +18,32 @@ namespace s21 {
 
 struct TsmResult {
   vector<int> vertices;
-  double distance;
+  double distance = SIZE_MAX;
 };
 
 class TSPAlgorithm {
  public:
-  TSPAlgorithm() = delete;
-  static TsmResult Solve(Graph &graph);
+  TsmResult Solve(Graph &graph);
 
  private:
-  static const float alpha_ = 1, beta_ = 1;
-  static vector<int> attended_;
-  static Graph pheromones_;
-  static TsmResult result_;
+  vector<pair<size_t, float>> probabilities_;
+  const int kPheromone_track_ = 5, kPheromon_evaporation_rate_ = 1;
+  const float kAlpha_ = 1, kBeta_ = 1;
+  vector<int> attended_;
+  Graph pheromones_;
+  TsmResult result_;
 
-  static void RunThroughGraphFromVertex(Graph &graph, size_t i);
-  static bool IsAttended(int j);
-  static float CalculateNumerator(int pheromone, int edge_length);
-  static void CalculateProbabilities(vector<float> &probabilities,
-                                     float denominator);
+  void RunThroughGraphFromVertex(Graph &graph, size_t i);
+  float GetProbabilitiesDenominator(Graph &graph, size_t start);
+  bool IsNotAllAttended(Graph &graph);
+  bool IsAttended(const int j);
+  float CalculateNumerator(const int pheromone, const int edge_length);
+  void DivideProbabilitiesByDenominator(const float denominator);
+  float GetRandomPercentValue();
+  size_t GetNextDestination(const float random_percent);
+  void RunPheromonesEvaporation();
+  void AddPheromoneTrack(size_t start, size_t dest);
+  void SetNewResult(TsmResult &result);
 };
 
 }  // namespace s21

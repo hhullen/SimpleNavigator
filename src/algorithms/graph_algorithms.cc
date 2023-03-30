@@ -101,7 +101,8 @@ Graph GraphAlgorithms::getShortestPathsBetweenAllVertices(Graph &graph) {
 }
 
 TsmResult GraphAlgorithms::solveTravelingSalesmanProblem(Graph &graph) {
-  return TSPAlgorithm::Solve(graph);
+  TSPAlgorithm tsp;
+  return tsp.Solve(graph);
 }
 
 }  // namespace s21
