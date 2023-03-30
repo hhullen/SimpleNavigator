@@ -13,6 +13,7 @@ using s21::GraphAlgorithms;
 using std::atoi;
 using std::cout;
 using std::invalid_argument;
+using std::isdigit;
 using std::map;
 using std::string;
 

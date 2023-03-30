@@ -13,12 +13,10 @@ int main(int argc, char* argv[]) {
     UtilityCLI utility(argc, argv);
     utility.Exec();
     exit_code = 0;
-  } catch (string message) {
-    cout << message << "\n";
   } catch (invalid_argument ex) {
     cerr << "Exception cought: " << ex.what() << "\n";
   } catch (...) {
-    cerr << "Unknown execution error\n";
+    cerr << "Unknown execution error occurred.\n";
   }
   return exit_code;
 }

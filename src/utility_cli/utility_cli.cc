@@ -27,7 +27,7 @@ void UtilityCLI::ReadArguments(int argc, char* argv[]) {
 }
 
 bool UtilityCLI::IsOption(string& arg) {
-  return arg.size() == 2 && arg[0] == '-';
+  return arg.size() == 2 && arg[0] == '-' && !isdigit(arg[1]);
 }
 
 void UtilityCLI::CheckNextPresence(int i, int argc, string& arg) {
