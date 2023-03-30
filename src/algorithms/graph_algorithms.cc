@@ -5,7 +5,7 @@ namespace s21 {
 GraphAlgorithms::GraphAlgorithms() {}
 
 vector<int> GraphAlgorithms::depthFirstSearch(Graph &graph, int startVertex) {
-  ValidateIndexes(graph, &startVertex);
+  Validatevertex(graph, startVertex);
   vector<int> result;
   vector<bool> visited;
   stack<int> stack_vertex;
@@ -30,6 +30,7 @@ vector<int> GraphAlgorithms::depthFirstSearch(Graph &graph, int startVertex) {
 }
 
 vector<int> GraphAlgorithms::breadthFirstSearch(Graph &graph, int startVertex) {
+  Validatevertex(graph, startVertex);
   vector<int> result;
   vector<bool> visited;
   queue<int> queue_vertex;
@@ -55,6 +56,8 @@ vector<int> GraphAlgorithms::breadthFirstSearch(Graph &graph, int startVertex) {
 
 int GraphAlgorithms::getShortestPathBetweenVertices(Graph &graph, int vertex1,
                                                     int vertex2) {
+  Validatevertex(graph, vertex1);
+  Validatevertex(graph, vertex2);
   vector<bool> visited;
   queue<int> queue_vertex;
   int matrix_size = graph.get_size();
@@ -106,10 +109,8 @@ TsmResult GraphAlgorithms::solveTravelingSalesmanProblem(Graph &graph) {
   return tsp.Solve(graph);
 }
 
-void GraphAlgorithms::ValidateIndexes(Graph &graph, const int *vertex1,
-                                      const int *vertex2 = nullptr) {
-  if (*vertex1 < 1 || *vertex2 < 1 || *vertex1 > graph.get_size() ||
-      *vertex2 > graph.get_size()) {
+void GraphAlgorithms::Validatevertex(Graph &graph, int vertex) {
+  if (vertex < 1 || static_cast<size_t>(vertex) > graph.get_size()) {
     throw invalid_argument("Incorrect vertex value.");
   }
 }

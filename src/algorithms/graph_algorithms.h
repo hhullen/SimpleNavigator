@@ -9,6 +9,8 @@
 #include "../graph/graph.h"
 #include "tsp_algorithm/tsp_algorithm.h"
 
+using std::invalid_argument;
+
 namespace s21 {
 
 class GraphAlgorithms {
@@ -19,8 +21,7 @@ class GraphAlgorithms {
   int getShortestPathBetweenVertices(Graph &graph, int vertex1, int vertex2);
   Graph getShortestPathsBetweenAllVertices(Graph &graph);
   TsmResult solveTravelingSalesmanProblem(Graph &graph);
-  void ValidateIndexes(Graph &graph, const int *vertex1,
-                       const int *vertex2 = nullptr);
+  void Validatevertex(Graph &graph, int vertex);
 };
 
 }  // namespace s21

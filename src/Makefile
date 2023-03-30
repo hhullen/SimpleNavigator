@@ -17,7 +17,7 @@ LIBS_TO_COMPILE=-L. -l$(DOT_LIB) -l$(GRAPH_LIB) -l$(ALGORITHMS_LIB)
 DOT_LIB=dotlib
 COMPILER=g++
 STD=--std=c++17
-CODE_DIAG_FLAGS=-Wall -Wextra -Werror -Wpedantic
+CODE_DIAG_FLAGS=-Wno-write-strings -Wall -Wextra -Werror -Wpedantic
 TEST_FLAGS=-lgtest -pthread -lgtest_main
 CLANG_FILE=.clang-format
 CLANG_FILE_WAY=..$(SEP)materials$(SEP)linters$(SEP)$(CLANG_FILE)
@@ -62,7 +62,7 @@ all: clean tests nav_cli
 $(GRAPH_LIB).a: libs21_graph.a
 
 libs21_graph.a:
-	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -c $(GRAPH_BUILD_FILES) -I $(INCLUDE_DIR)
+	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -O3 -c $(GRAPH_BUILD_FILES) -I $(INCLUDE_DIR)
 	ar cr lib$(GRAPH_LIB).a *.o
 	ranlib lib$(GRAPH_LIB).a
 	$(DELETE_FILE) *.o
@@ -70,7 +70,7 @@ libs21_graph.a:
 $(ALGORITHMS_LIB).a: libs21_graph_algorithms.a
 
 libs21_graph_algorithms.a:
-	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -c $(ALGORITHMS_BUILD_FILES) -I $(INCLUDE_DIR)
+	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -O3 -c $(ALGORITHMS_BUILD_FILES) -I $(INCLUDE_DIR)
 	ar cr lib$(ALGORITHMS_LIB).a *.o
 	ranlib lib$(ALGORITHMS_LIB).a
 	$(DELETE_FILE) *.o
@@ -78,7 +78,7 @@ libs21_graph_algorithms.a:
 $(DOT_LIB).a: libdotlib.a
 
 libdotlib.a:
-	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -c $(INCLUDE_DIR)$(SEP)dot_writer/*.cpp
+	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -O3 -c $(INCLUDE_DIR)$(SEP)dot_writer/*.cpp
 	ar cr lib$(DOT_LIB).a *.o
 	ranlib lib$(DOT_LIB).a
 	$(DELETE_FILE) *.o
@@ -90,7 +90,7 @@ check:
 	clang-format -n --style=Google $(CHECK_FILES)
 
 tests: $(DOT_LIB).a $(GRAPH_LIB).a $(ALGORITHMS_LIB).a
-	$(COMPILER) $(STD) -O3 $(TESTBUILD_FILES) $(CLI_BULD_FILES) $(TEST_FLAGS) \
+	$(COMPILER) $(STD) $(TESTBUILD_FILES) $(CLI_BULD_FILES) $(TEST_FLAGS) \
 	-I $(INCLUDE_DIR) $(LIBS_TO_COMPILE) -o $(TEST_EXECUTABLE)
 	.$(SEP)$(TEST_EXECUTABLE)
 

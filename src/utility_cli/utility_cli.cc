@@ -27,7 +27,7 @@ void UtilityCLI::ReadArguments(int argc, char* argv[]) {
 }
 
 bool UtilityCLI::IsOption(string& arg) {
-  return arg.size() > 1 && arg[0] == '-';
+  return arg.size() == 2 && arg[0] == '-';
 }
 
 void UtilityCLI::CheckNextPresence(int i, int argc, string& arg) {
@@ -113,7 +113,7 @@ int UtilityCLI::GetStartVertexOption() {
 
 int UtilityCLI::GetEndVertexOption() {
   string end_vertex_option = GetOptionParameterIfExists(
-      "-e", "No start vertex specified. For instance: ... -e 7.");
+      "-e", "No end vertex specified. For instance: ... -e 7.");
   return atoi(end_vertex_option.data());
 }
 
