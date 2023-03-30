@@ -5,6 +5,7 @@ namespace s21 {
 GraphAlgorithms::GraphAlgorithms() {}
 
 vector<int> GraphAlgorithms::depthFirstSearch(Graph &graph, int startVertex) {
+  ValidateIndexes(graph, &startVertex);
   vector<int> result;
   vector<bool> visited;
   stack<int> stack_vertex;
@@ -103,6 +104,14 @@ Graph GraphAlgorithms::getShortestPathsBetweenAllVertices(Graph &graph) {
 TsmResult GraphAlgorithms::solveTravelingSalesmanProblem(Graph &graph) {
   TSPAlgorithm tsp;
   return tsp.Solve(graph);
+}
+
+void GraphAlgorithms::ValidateIndexes(Graph &graph, const int *vertex1,
+                                      const int *vertex2 = nullptr) {
+  if (*vertex1 < 1 || *vertex2 < 1 || *vertex1 > graph.get_size() ||
+      *vertex2 > graph.get_size()) {
+    throw invalid_argument("Incorrect vertex value.");
+  }
 }
 
 }  // namespace s21
