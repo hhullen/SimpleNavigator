@@ -2,13 +2,18 @@ MAIN_PROJ_NAME=SimpleNavigator
 TEST_DIR=tests
 GRAPH_DIR=graph
 ALGORITHMS_DIR=algorithms
+CLI_DIR=utility_cli
 INCLUDE_DIR=include
 GRAPH_BUILD_FILES=$(GRAPH_DIR)$(SEP)graph.cc
-ALGORITHMS_BUILD_FILES=$(ALGORITHMS_DIR)$(SEP)graph_algorithms.cc
+ALGORITHMS_BUILD_FILES=$(ALGORITHMS_DIR)$(SEP)graph_algorithms.cc \
+					   $(ALGORITHMS_DIR)$(SEP)tsp_algorithm$(SEP)tsp_algorithm.cc
 TESTBUILD_FILES=$(TEST_DIR)$(SEP)$(MAIN_PROJ_NAME)_tests.cc
-EXECUTABLE=$(MAIN_PROJ_NAME)_test.out
+CLI_BULD_FILES=main.cc $(CLI_DIR)/utility_cli.cc
+TEST_EXECUTABLE=$(MAIN_PROJ_NAME)_test.out
+CLI_EXECUTABLE=nav
 ALGORITHMS_LIB=s21_graph_algorithms
 GRAPH_LIB=s21_graph
+LIBS_TO_COMPILE=-L. -l$(DOT_LIB) -l$(GRAPH_LIB) -l$(ALGORITHMS_LIB)
 DOT_LIB=dotlib
 COMPILER=g++
 STD=--std=c++17
@@ -16,10 +21,10 @@ CODE_DIAG_FLAGS=-Wall -Wextra -Werror -Wpedantic
 TEST_FLAGS=-lgtest -pthread -lgtest_main
 CLANG_FILE=.clang-format
 CLANG_FILE_WAY=..$(SEP)materials$(SEP)linters$(SEP)$(CLANG_FILE)
-CHECK_FILES=$(GRAPH_DIR)$(SEP)* $(ALGORITHMS_DIR)$(SEP)*
+CHECK_FILES=$(GRAPH_DIR)$(SEP)* $(ALGORITHMS_DIR)$(SEP)* $(CLI_DIR)$(SEP)*
 CPPCH_SETUP=--enable=all --suppress=missingInclude --suppress=unusedFunction -v --language=c++ $(STD)
 BUILD_DIR=..$(SEP)build
-TO_DELETE_FILES=*.o *.out *.dSYM *.gch .DS_Store $(EXECUTABLE) $(CLANG_FILE) \
+TO_DELETE_FILES=*.o *.out *.dSYM *.gch .DS_Store $(TEST_EXECUTABLE) $(CLI_EXECUTABLE) $(CLANG_FILE) \
 				dot_test.dot lib$(GRAPH_LIB).a lib$(ALGORITHMS_LIB).a lib$(DOT_LIB).a
 TO_DELETE_FOLDERS=$(BUILD_DIR)
 
@@ -52,21 +57,27 @@ endif
 
 .PHONY: all check tests clean
 
-all: clean tests
+all: clean tests nav_cli
 
-$(GRAPH_LIB).a:
+$(GRAPH_LIB).a: libs21_graph.a
+
+libs21_graph.a:
 	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -c $(GRAPH_BUILD_FILES) -I $(INCLUDE_DIR)
 	ar cr lib$(GRAPH_LIB).a *.o
 	ranlib lib$(GRAPH_LIB).a
 	$(DELETE_FILE) *.o
 
-$(ALGORITHMS_LIB).a:
+$(ALGORITHMS_LIB).a: libs21_graph_algorithms.a
+
+libs21_graph_algorithms.a:
 	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -c $(ALGORITHMS_BUILD_FILES) -I $(INCLUDE_DIR)
 	ar cr lib$(ALGORITHMS_LIB).a *.o
 	ranlib lib$(ALGORITHMS_LIB).a
 	$(DELETE_FILE) *.o
 
-$(DOT_LIB).a:
+$(DOT_LIB).a: libdotlib.a
+
+libdotlib.a:
 	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -c $(INCLUDE_DIR)$(SEP)dot_writer/*.cpp
 	ar cr lib$(DOT_LIB).a *.o
 	ranlib lib$(DOT_LIB).a
@@ -80,21 +91,19 @@ check:
 
 tests: $(DOT_LIB).a $(GRAPH_LIB).a $(ALGORITHMS_LIB).a
 	$(COMPILER) $(STD) -O3 $(CODE_DIAG_FLAGS) $(TESTBUILD_FILES) $(TEST_FLAGS) \
-	-I $(INCLUDE_DIR) -L. -l$(DOT_LIB) -l$(GRAPH_LIB) -l$(ALGORITHMS_LIB) -o $(EXECUTABLE)
-	.$(SEP)$(EXECUTABLE)
+	-I $(INCLUDE_DIR) $(LIBS_TO_COMPILE) -o $(TEST_EXECUTABLE)
+	.$(SEP)$(TEST_EXECUTABLE)
 
 clean:
 	$(DELETE_FOLDER) $(TO_DELETE_FOLDERS)
 	$(DELETE_FILE) $(TO_DELETE_FILES)
 
-t: libdotlib.a libs21_graph.a
-	g++ --std=c++17 main.cc utility_cli/utility_cli.cc \
-					algorithms/graph_algorithms.cc \
-					algorithms/tsp_algorithm/tsp_algorithm.cc \
-					-L . -ldotlib -ls21_graph -I include -o nav
-	./nav -f tests/graph_example.txt -m DFS -s 4
-	./nav -f tests/graph_example.txt -m BFS -s 9
-	./nav -f tests/graph_example.txt -m SPBV -s 7 -e 1
-	./nav -f tests/graph_example.txt -m SPBA
-	./nav -f tests/graph_example.txt -m LST
-	./nav -f tests/graph_example.txt -m TSP
+nav_cli: libdotlib.a libs21_graph.a libs21_graph_algorithms.a
+	$(MAKEDIR) -p $(BUILD_DIR)
+	g++ $(STD) -O3 -o $(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) $(CLI_BULD_FILES) $(LIBS_TO_COMPILE)  -I $(INCLUDE_DIR)
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m DFS -s 4
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m BFS -s 9
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m SPBV -s 7 -e 1
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m SPBA
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m LST
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m TSP
