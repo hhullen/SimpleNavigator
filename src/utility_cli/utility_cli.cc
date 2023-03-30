@@ -2,8 +2,7 @@
 
 namespace s21 {
 
-UtilityCLI::UtilityCLI(int argc, char* argv[])
-    : start_vertex_(1), end_vertex_(1) {
+UtilityCLI::UtilityCLI(int argc, char* argv[]) {
   ReadArguments(argc, argv);
   InitialiseAlgorithms();
 }
@@ -45,7 +44,8 @@ void UtilityCLI::Exec() {
 
 void UtilityCLI::InitializeGraph() {
   string file_path = GetOptionParameterIfExists(
-      "-f", "No input graph file specified. For instance: -f path/to/file.");
+      "-f",
+      "No input graph file specified. For instance: ... -f path/to/file.");
   graph_.LoadGraphFromFile(file_path);
 }
 
@@ -72,23 +72,49 @@ void UtilityCLI::RunAlgorithm() {
   (this->*algorithms_runners_[mode])();
 }
 
-void UtilityCLI::DFS() { std::cout << "DFS RUN"; }
+void UtilityCLI::DFS() {
+  int start_vertex = GetStartVertexOption();
+  vector<int> route = algorithms_.depthFirstSearch(graph_, start_vertex);
+  PrintRoute(route);
+}
 
-void UtilityCLI::BFS() {}
+void UtilityCLI::BFS() {
+  int start_vertex = GetStartVertexOption();
+  vector<int> route = algorithms_.breadthFirstSearch(graph_, start_vertex);
+  PrintRoute(route);
+}
 
-void UtilityCLI::SPBV() {}
+void UtilityCLI::SPBV() {
+  int start_vertex = GetStartVertexOption();
+  int end_vertex = GetEndVertexOption();
+  int distance = algorithms_.getShortestPathBetweenVertices(
+      graph_, start_vertex, end_vertex);
+  cout << "Distance: " << distance << "\n";
+}
 
-void UtilityCLI::SPBA() {}
+void UtilityCLI::SPBA() {
+  Graph result = algorithms_.getShortestPathsBetweenAllVertices(graph_);
+  Graph::Print(result);
+}
 
-void UtilityCLI::LST() {}
+void UtilityCLI::LST() { cout << "Jesus Christ! It's LeastSpanningTree!\n"; }
 
 void UtilityCLI::TSP() {
-  std::cout << "TSP RUN\n";
   TsmResult result = algorithms_.solveTravelingSalesmanProblem(graph_);
-  for (int n : result.vertices) {
-    std::cout << n << "-";
-  }
-  std::cout << "\n" << result.distance << "\n";
+  PrintRoute(result.vertices);
+  cout << "Distance: " << result.distance << "\n";
+}
+
+int UtilityCLI::GetStartVertexOption() {
+  string start_vertex_option = GetOptionParameterIfExists(
+      "-s", "No start vertex specified. For instance: ... -s 3.");
+  return atoi(start_vertex_option.data());
+}
+
+int UtilityCLI::GetEndVertexOption() {
+  string end_vertex_option = GetOptionParameterIfExists(
+      "-e", "No start vertex specified. For instance: ... -e 7.");
+  return atoi(end_vertex_option.data());
 }
 
 void UtilityCLI::WriteOutFile() {
@@ -99,6 +125,14 @@ void UtilityCLI::WriteOutFile() {
     return;
   }
   graph_.ExportGraphToDot(file_path);
+}
+
+void UtilityCLI::PrintRoute(vector<int>& vertices) {
+  size_t i = 0;
+  for (; i < vertices.size() - 1; ++i) {
+    cout << vertices[i] << "-";
+  }
+  cout << vertices[i] << "\n";
 }
 
 }  // namespace s21

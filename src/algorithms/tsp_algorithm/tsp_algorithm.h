@@ -2,7 +2,6 @@
 #define SRC_ALGORITHMS_TSP_ALGORITHM_TSP_ALGORITHM_H_
 
 #include <algorithm>
-#include <cmath>
 #include <random>
 #include <vector>
 
@@ -18,7 +17,7 @@ namespace s21 {
 
 struct TsmResult {
   vector<int> vertices;
-  double distance = SIZE_MAX;
+  double distance = 0;
 };
 
 class TSPAlgorithm {
@@ -33,6 +32,7 @@ class TSPAlgorithm {
   Graph pheromones_;
   TsmResult result_;
 
+  void CloseRoute(Graph &graph);
   void RunThroughGraphFromVertex(Graph &graph, size_t i);
   float GetProbabilitiesDenominator(Graph &graph, size_t start);
   bool IsNotAllAttended(Graph &graph);
@@ -43,6 +43,7 @@ class TSPAlgorithm {
   size_t GetNextDestination(const float random_percent);
   void RunPheromonesEvaporation();
   void AddPheromoneTrack(size_t start, size_t dest);
+  void UpdateResult(TsmResult &result, int distance, size_t dest);
   void SetNewResult(TsmResult &result);
 };
 

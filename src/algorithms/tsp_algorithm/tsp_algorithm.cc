@@ -11,13 +11,20 @@ TsmResult TSPAlgorithm::Solve(Graph &graph) {
     RunThroughGraphFromVertex(graph, i);
     attended_.clear();
   }
+  CloseRoute(graph);
   return result_;
+}
+
+void TSPAlgorithm::CloseRoute(Graph &graph) {
+  int first = result_.vertices.front();
+  int last = result_.vertices.back();
+  result_.distance += graph(first, last);
+  result_.vertices.push_back(first);
 }
 
 void TSPAlgorithm::RunThroughGraphFromVertex(Graph &graph, size_t start) {
   TsmResult result;
-  result.vertices.push_back((int)start);
-  result.distance = 0;
+  result.vertices.push_back(static_cast<int>(start) + 1);
   while (IsNotAllAttended(graph)) {
     probabilities_.clear();
     float denominator = GetProbabilitiesDenominator(graph, start);
@@ -29,13 +36,12 @@ void TSPAlgorithm::RunThroughGraphFromVertex(Graph &graph, size_t start) {
     RunPheromonesEvaporation();
     AddPheromoneTrack(start, next_dest);
 
-    result.distance += graph(start, next_dest);
+    int distance = graph(start, next_dest);
+    UpdateResult(result, distance, next_dest);
     start = next_dest;
     attended_.push_back(start);
-    std::cout << "Random " << random_percent << " NEXT " << start << "\n";
   }
   SetNewResult(result);
-  std::cout << "\n";
 }
 
 float TSPAlgorithm::GetProbabilitiesDenominator(Graph &graph, size_t start) {
@@ -68,7 +74,6 @@ float TSPAlgorithm::CalculateNumerator(const int pheromone,
 void TSPAlgorithm::DivideProbabilitiesByDenominator(const float denominator) {
   for (size_t i = 0; i < probabilities_.size(); ++i) {
     probabilities_[i].second = probabilities_[i].second / denominator * 100;
-    // std::cout << probabilities[i].second << "\n";
   }
 }
 
@@ -100,9 +105,13 @@ void TSPAlgorithm::AddPheromoneTrack(size_t start, size_t dest) {
   pheromones_(start, dest) += kPheromone_track_;
 }
 
+void TSPAlgorithm::UpdateResult(TsmResult &result, int distance, size_t dest) {
+  result.distance += distance;
+  result.vertices.push_back(static_cast<int>(dest) + 1);
+}
+
 void TSPAlgorithm::SetNewResult(TsmResult &result) {
-  if (result.distance < result_.distance) {
-    std::cout << "NEW\n";
+  if (result_.distance == 0 || result.distance < result_.distance) {
     result_ = result;
   }
 }

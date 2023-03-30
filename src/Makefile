@@ -91,5 +91,10 @@ t: libdotlib.a libs21_graph.a
 	g++ --std=c++17 main.cc utility_cli/utility_cli.cc \
 					algorithms/graph_algorithms.cc \
 					algorithms/tsp_algorithm/tsp_algorithm.cc \
-					-L . -ldotlib -ls21_graph -I include
-	./a.out -f tests/graph_example.txt -m TSP
+					-L . -ldotlib -ls21_graph -I include -o nav
+	./nav -f tests/graph_example.txt -m DFS -s 4
+	./nav -f tests/graph_example.txt -m BFS -s 9
+	./nav -f tests/graph_example.txt -m SPBV -s 7 -e 1
+	./nav -f tests/graph_example.txt -m SPBA
+	./nav -f tests/graph_example.txt -m LST
+	./nav -f tests/graph_example.txt -m TSP

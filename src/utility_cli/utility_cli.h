@@ -10,6 +10,8 @@
 
 using s21::Graph;
 using s21::GraphAlgorithms;
+using std::atoi;
+using std::cout;
 using std::invalid_argument;
 using std::map;
 using std::string;
@@ -26,8 +28,6 @@ class UtilityCLI {
   map<string, string> arguments_;
 
   GraphAlgorithms algorithms_;
-  int start_vertex_;
-  int end_vertex_;
   Graph graph_;
 
   void InitialiseAlgorithms();
@@ -45,7 +45,10 @@ class UtilityCLI {
   void SPBA();
   void LST();
   void TSP();
+  int GetStartVertexOption();
+  int GetEndVertexOption();
   void WriteOutFile();
+  void PrintRoute(vector<int>& vertices);
 };
 
 }  // namespace s21
