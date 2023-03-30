@@ -20,6 +20,7 @@ namespace s21 {
 
 class UtilityCLI {
  public:
+  UtilityCLI() = delete;
   UtilityCLI(int argc, char* argv[]);
   void Exec();
 

@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
 
 #include "../graph/graph.h"
+#include "../utility_cli/utility_cli.h"
 
 using s21::Graph;
+using s21::UtilityCLI;
 using std::invalid_argument;
 
 TEST(graph_tests, constructing) { EXPECT_NO_THROW(Graph gg); }
@@ -30,4 +32,58 @@ TEST(graph_tests, dot_exporting) {
   EXPECT_THROW(gg.ExportGraphToDot(""), invalid_argument);
   gg.LoadGraphFromFile("tests/graph_example.txt");
   EXPECT_NO_THROW(gg.ExportGraphToDot("dot_test.dot"));
+}
+
+TEST(cli_tests, constructor_with_args) {
+  int argc = 5;
+  char* argv[] = {"nav", "-f", "tests/graph_example.txt", "-m", "TSP"};
+  EXPECT_NO_THROW(UtilityCLI cli(argc, argv));
+}
+
+TEST(cli_tests, constructor_no_args) {
+  int argc = 1;
+  char* argv[] = {"nav"};
+  EXPECT_NO_THROW(UtilityCLI cli(argc, argv));
+}
+
+TEST(cli_tests, constructor_option_with_no_parameter) {
+  int argc = 2;
+  char* argv[] = {"nav", "-f"};
+  EXPECT_THROW(UtilityCLI cli(argc, argv), invalid_argument);
+}
+
+TEST(cli_tests, constructor_option_with_options_in_a_row) {
+  int argc = 5;
+  char* argv[] = {"nav", "-f", "-m", "-s", "-e"};
+  EXPECT_THROW(UtilityCLI cli(argc, argv), invalid_argument);
+}
+
+TEST(cli_tests, execution_wrong_mode) {
+  int argc = 5;
+  char* argv[] = {"nav", "-f", "tests/graph_example.txt", "-m", "ABOBA"};
+  UtilityCLI cli(argc, argv);
+  EXPECT_THROW(cli.Exec(), invalid_argument);
+}
+
+TEST(cli_tests, execution_with_no_options) {
+  int argc = 1;
+  char* argv[] = {"nav"};
+  UtilityCLI cli(argc, argv);
+  EXPECT_THROW(cli.Exec(), invalid_argument);
+}
+
+TEST(cli_tests, execution_DFS) {
+  int argc = 7;
+  char* argv[] = {"nav", "-f", "tests/graph_example.txt", "-m", "DFS",
+                  "-s",  "4"};
+  UtilityCLI cli(argc, argv);
+  EXPECT_NO_THROW(cli.Exec());
+}
+
+TEST(cli_tests, execution_DFS_wrovg_vertex) {
+  int argc = 7;
+  char* argv[] = {"nav", "-f", "tests/graph_example.txt", "-m", "DFS",
+                  "-s",  "60"};  // SEGA
+  UtilityCLI cli(argc, argv);
+  EXPECT_NO_THROW(cli.Exec());
 }

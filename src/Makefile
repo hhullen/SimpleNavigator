@@ -8,7 +8,7 @@ GRAPH_BUILD_FILES=$(GRAPH_DIR)$(SEP)graph.cc
 ALGORITHMS_BUILD_FILES=$(ALGORITHMS_DIR)$(SEP)graph_algorithms.cc \
 					   $(ALGORITHMS_DIR)$(SEP)tsp_algorithm$(SEP)tsp_algorithm.cc
 TESTBUILD_FILES=$(TEST_DIR)$(SEP)$(MAIN_PROJ_NAME)_tests.cc
-CLI_BULD_FILES=main.cc $(CLI_DIR)/utility_cli.cc
+CLI_BULD_FILES=$(CLI_DIR)/utility_cli.cc
 TEST_EXECUTABLE=$(MAIN_PROJ_NAME)_test.out
 CLI_EXECUTABLE=nav
 ALGORITHMS_LIB=s21_graph_algorithms
@@ -90,7 +90,7 @@ check:
 	clang-format -n --style=Google $(CHECK_FILES)
 
 tests: $(DOT_LIB).a $(GRAPH_LIB).a $(ALGORITHMS_LIB).a
-	$(COMPILER) $(STD) -O3 $(CODE_DIAG_FLAGS) $(TESTBUILD_FILES) $(TEST_FLAGS) \
+	$(COMPILER) $(STD) -O3 $(TESTBUILD_FILES) $(CLI_BULD_FILES) $(TEST_FLAGS) \
 	-I $(INCLUDE_DIR) $(LIBS_TO_COMPILE) -o $(TEST_EXECUTABLE)
 	.$(SEP)$(TEST_EXECUTABLE)
 
@@ -100,7 +100,7 @@ clean:
 
 nav_cli: libdotlib.a libs21_graph.a libs21_graph_algorithms.a
 	$(MAKEDIR) -p $(BUILD_DIR)
-	g++ $(STD) -O3 -o $(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) $(CLI_BULD_FILES) $(LIBS_TO_COMPILE)  -I $(INCLUDE_DIR)
+	g++ $(STD) -O3 -o $(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) main.cc $(CLI_BULD_FILES) $(LIBS_TO_COMPILE)  -I $(INCLUDE_DIR)
 	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m DFS -s 4
 	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m BFS -s 9
 	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m SPBV -s 7 -e 1
