@@ -14,7 +14,7 @@ In this project implemented some basic algorithms on graphs.
         2. `BFS` - breadth-first search in the graph from a given vertex. It needs additional start vertex specified as `[-s] [3]`.
         3. `SPBV` - searching for the shortest path between two vertices in a graph using Dijkstra's algorithm. It needs additional start and end vertexes specified as `[-s] [3] [-e] [4]`.
         4. `SPBA` - searching for the shortest paths between all pairs of vertices in a graph using the Floyd-Warshall algorithm.
-        5. `LST` - searching for the minimal spanning tree in a graph using Prim's algorithm.
+        5. `LST` - searching for the least spanning tree in a graph using Prim's algorithm.
         6. `TSP` - solving the traveling salesman's problem using the ant colony algorithm.
     - `[-o] [path/to/file.dot]` export graph to `dot` format file.
 - Graph file format must be like:
