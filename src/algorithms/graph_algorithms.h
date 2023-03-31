@@ -1,9 +1,16 @@
 #ifndef SRC_ALGORITHMS_GRAPH_ALGORITHMS_H_
 #define SRC_ALGORITHMS_GRAPH_ALGORITHMS_H_
-#include "../graph/graph.h"
-#include <climits>
+
 #include <containers/queue.h>
 #include <containers/stack.h>
+
+#include <climits>
+
+#include "../graph/graph.h"
+#include "tsp_algorithm/tsp_algorithm.h"
+
+using std::invalid_argument;
+
 namespace s21 {
 
 class GraphAlgorithms {
@@ -14,9 +21,10 @@ public:
   int getShortestPathBetweenVertices(Graph &graph, int vertex1, int vertex2);
   Graph getShortestPathsBetweenAllVertices(Graph &graph);
   std::vector<std::vector<int>> getLeastSpanningTree(Graph &graph);
+  TsmResult solveTravelingSalesmanProblem(Graph &graph);
 
 private:
-  //   Graph graph_;
+  void Validatevertex(Graph &graph, int vertex);
 };
 
 } // namespace s21

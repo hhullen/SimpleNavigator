@@ -15,6 +15,7 @@ using DotWriter::EdgeAttributeSet;
 using DotWriter::Node;
 using DotWriter::RootGraph;
 using std::atoi;
+using std::cout;
 using std::getline;
 using std::ifstream;
 using std::invalid_argument;
@@ -61,6 +62,16 @@ public:
   void LoadGraphFromFile(const string &path);
   void ExportGraphToDot(const string &path,
                         const string &graph_name = "somegraph");
+
+  static void Print(Graph &graph) {
+    size_t size = graph.get_size();
+    for (size_t i = 0; i < size; ++i) {
+      for (size_t j = 0; j < size; ++j) {
+        cout << graph(i, j) << "\t";
+      }
+      cout << "\n";
+    }
+  }
 
 private:
   AdjacencyMatrix matrix_;

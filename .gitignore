@@ -34,3 +34,5 @@
 # other
 *.DS_Store
 *a.out.dSYM
+*nav
+*.dot

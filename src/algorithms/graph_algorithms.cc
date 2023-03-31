@@ -27,7 +27,33 @@ vector<int> GraphAlgorithms::depthFirstSearch(Graph &graph, int startVertex) {
   return result;
 }
 
+vector<int> GraphAlgorithms::depthFirstSearch(Graph &graph, int startVertex) {
+  Validatevertex(graph, startVertex);
+  vector<int> result;
+  vector<bool> visited;
+  stack<int> stack_vertex;
+  int pop_vertex = 0;
+  int matrix_size = graph.get_size();
+  visited.resize(matrix_size);
+  stack_vertex.push(startVertex - 1);
+  while (!stack_vertex.empty()) {
+    pop_vertex = stack_vertex.top();
+    stack_vertex.pop();
+    if (!visited[pop_vertex]) {
+      visited[pop_vertex] = 1;
+      for (int i = matrix_size - 1; i >= 0; --i) {
+        if (graph(pop_vertex, i) && !visited[i]) {
+          stack_vertex.push(i);
+        }
+      }
+      result.push_back(pop_vertex + 1);
+    }
+  }
+  return result;
+}
+
 vector<int> GraphAlgorithms::breadthFirstSearch(Graph &graph, int startVertex) {
+  Validatevertex(graph, startVertex);
   vector<int> result;
   vector<bool> visited;
   queue<int> queue_vertex;
@@ -53,6 +79,8 @@ vector<int> GraphAlgorithms::breadthFirstSearch(Graph &graph, int startVertex) {
 
 int GraphAlgorithms::getShortestPathBetweenVertices(Graph &graph, int vertex1,
                                                     int vertex2) {
+  Validatevertex(graph, vertex1);
+  Validatevertex(graph, vertex2);
   vector<bool> visited;
   queue<int> queue_vertex;
   int matrix_size = graph.get_size();
@@ -141,6 +169,17 @@ GraphAlgorithms::getLeastSpanningTree(Graph &graph) {
     }
   }
   return res;
+}
+
+TsmResult GraphAlgorithms::solveTravelingSalesmanProblem(Graph &graph) {
+  TSPAlgorithm tsp;
+  return tsp.Solve(graph);
+}
+
+void GraphAlgorithms::Validatevertex(Graph &graph, int vertex) {
+  if (vertex < 1 || static_cast<size_t>(vertex) > graph.get_size()) {
+    throw invalid_argument("Incorrect vertex value.");
+  }
 }
 
 } // namespace s21
