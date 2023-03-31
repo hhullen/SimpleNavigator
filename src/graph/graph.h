@@ -20,12 +20,13 @@ using std::ifstream;
 using std::invalid_argument;
 using std::isdigit;
 using std::ofstream;
+using std::ostream;
 using std::string;
 using std::to_string;
 using std::vector;
 
 class AdjacencyMatrix {
- public:
+public:
   void Clear() {
     matrix_.clear();
     matrix_.shrink_to_fit();
@@ -43,12 +44,12 @@ class AdjacencyMatrix {
   size_t Size() { return matrix_.size(); }
   int &operator()(int i, int j) { return matrix_[i][j]; }
 
- private:
+private:
   vector<vector<int>> matrix_;
 };
 
 class Graph {
- public:
+public:
   Graph();
   explicit Graph(int size);
   ~Graph();
@@ -61,7 +62,7 @@ class Graph {
   void ExportGraphToDot(const string &path,
                         const string &graph_name = "somegraph");
 
- private:
+private:
   AdjacencyMatrix matrix_;
   ifstream *input_file_;
   ofstream *output_file_;
@@ -79,6 +80,6 @@ class Graph {
   void AddEdgeBetwenNodesToDotWriterObject(int i, int j, RootGraph &dot_object);
 };
 
-}  // namespace s21
+} // namespace s21
 
-#endif  // SRC_GRAPH_GRAPH_H_
+#endif // SRC_GRAPH_GRAPH_H_

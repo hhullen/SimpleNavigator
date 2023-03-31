@@ -3,11 +3,10 @@
 
 #include <iostream>
 
-namespace hhullen {
+namespace s21 {
 
-template <class T>
-class queue {
- public:
+template <class T> class queue {
+public:
   using value_type = T;
   using reference = value_type &;
   using const_reference = const value_type &;
@@ -30,12 +29,11 @@ class queue {
   void pop();
   void swap(queue &other);
 
-  template <typename... Args>
-  void emplace_back(Args &&...args);
+  template <typename... Args> void emplace_back(Args &&...args);
 
- private:
+private:
   class Node {
-   public:
+  public:
     value_type data;
     Node *next;
     Node *prev;
@@ -52,8 +50,7 @@ class queue {
   void fill_queue_by_other(const queue<value_type> &other);
 };
 
-template <class value_type>
-queue<value_type>::queue() : size_(0) {
+template <class value_type> queue<value_type>::queue() : size_(0) {
   get_null_node();
 }
 
@@ -79,16 +76,15 @@ queue<value_type>::queue(queue<value_type> &&other) : size_(0) {
   other.~queue();
 }
 
-template <class value_type>
-queue<value_type>::~queue() {
+template <class value_type> queue<value_type>::~queue() {
   while (head_) {
     pop();
   }
 }
 
 template <class value_type>
-queue<value_type> &queue<value_type>::operator=(
-    const queue<value_type> &other) {
+queue<value_type> &
+queue<value_type>::operator=(const queue<value_type> &other) {
   if (&other != this) {
     this->~queue();
 
@@ -99,25 +95,17 @@ queue<value_type> &queue<value_type>::operator=(
   return *this;
 }
 
-template <class value_type>
-const value_type &queue<value_type>::front() {
+template <class value_type> const value_type &queue<value_type>::front() {
   return head_->data;
 }
 
-template <class value_type>
-const value_type &queue<value_type>::back() {
+template <class value_type> const value_type &queue<value_type>::back() {
   return tail_->next->data;
 }
 
-template <class value_type>
-bool queue<value_type>::empty() {
-  return !size_;
-}
+template <class value_type> bool queue<value_type>::empty() { return !size_; }
 
-template <class value_type>
-size_t queue<value_type>::size() {
-  return size_;
-}
+template <class value_type> size_t queue<value_type>::size() { return size_; }
 
 template <class value_type>
 void queue<value_type>::push(const_reference value) {
@@ -127,8 +115,7 @@ void queue<value_type>::push(const_reference value) {
   ++size_;
 }
 
-template <class value_type>
-void queue<value_type>::pop() {
+template <class value_type> void queue<value_type>::pop() {
   Node *buffer = head_->prev;
   delete head_;
   head_ = buffer;
@@ -136,7 +123,7 @@ void queue<value_type>::pop() {
 }
 
 template <class value_type>
-void queue<value_type>::swap(hhullen::queue<value_type> &other) {
+void queue<value_type>::swap(s21::queue<value_type> &other) {
   Node *head_buffer = other.head_;
   Node *tail_buffer = other.tail_;
   size_type temp_size = other.size_;
@@ -148,8 +135,7 @@ void queue<value_type>::swap(hhullen::queue<value_type> &other) {
   size_ = temp_size;
 }
 
-template <class value_type>
-void queue<value_type>::get_null_node() {
+template <class value_type> void queue<value_type>::get_null_node() {
   Node *buffer = new Node;
   head_ = buffer;
   tail_ = buffer;
@@ -174,6 +160,6 @@ void queue<T>::emplace_back(Args &&...args) {
   }
 }
 
-}  // namespace hhullen
+} // namespace s21
 
-#endif  // SRC_INCLUDE_QUEUE_H_
+#endif // SRC_INCLUDE_QUEUE_H_

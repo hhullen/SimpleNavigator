@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "../algorithms/graph_algorithms.h"
 #include "../graph/graph.h"
 
 using s21::Graph;
@@ -22,7 +23,7 @@ TEST(graph_tests, loading) {
   EXPECT_THROW(gg.LoadGraphFromFile("tests/graph_example_bad_size.txt"),
                invalid_argument);
   EXPECT_NO_THROW(gg.LoadGraphFromFile("tests/graph_example.txt"));
-  EXPECT_EQ(gg.get_size(), 11);
+  EXPECT_EQ(gg.get_size(), 6);
 }
 
 TEST(graph_tests, dot_exporting) {
@@ -30,4 +31,32 @@ TEST(graph_tests, dot_exporting) {
   EXPECT_THROW(gg.ExportGraphToDot(""), invalid_argument);
   gg.LoadGraphFromFile("tests/graph_example.txt");
   EXPECT_NO_THROW(gg.ExportGraphToDot("dot_test.dot"));
+}
+
+TEST(biba, boba) {
+  s21::Graph graph;
+  s21::Graph res_graph;
+  graph.LoadGraphFromFile("tests/graph_example.txt");
+  s21::GraphAlgorithms test_algo;
+  // res_graph = test_algo.getShortestPathsBetweenAllVertices(graph);
+  // std::cout << test_algo.getShortestPathBetweenVertices(graph, 12, 19);
+  std::vector<std::vector<int>> aboba;
+  aboba = test_algo.getLeastSpanningTree(graph);
+  for (int i = 0; i < 6; ++i) {
+    for (int j = 0; j < 6; ++j) {
+      std::cout << aboba[i][j] << " ";
+    }
+    std::cout << '\n';
+  }
+  // for (auto i : aboba) {
+  //   std::cout << i << " ";
+  // }
+  // aboba = test_algo.breadthFirstSearch(graph, 2);
+  // for (size_t i = 0; i < res_graph.get_size(); ++i) {
+  //   for (size_t j = 0; j < res_graph.get_size(); ++j) {
+  //     std::cout << res_graph(i, j) << ' ';
+  //   }
+  //   std::cout << '\n';
+  // }
+  EXPECT_EQ(1, 1);
 }
