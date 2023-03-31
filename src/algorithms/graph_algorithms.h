@@ -14,19 +14,19 @@ using std::invalid_argument;
 namespace s21 {
 
 class GraphAlgorithms {
-public:
+ public:
   GraphAlgorithms();
   vector<int> depthFirstSearch(Graph &graph, int startVertex);
   vector<int> breadthFirstSearch(Graph &graph, int startVertex);
   int getShortestPathBetweenVertices(Graph &graph, int vertex1, int vertex2);
   Graph getShortestPathsBetweenAllVertices(Graph &graph);
-  std::vector<std::vector<int>> getLeastSpanningTree(Graph &graph);
+  vector<vector<int>> getLeastSpanningTree(Graph &graph);
   TsmResult solveTravelingSalesmanProblem(Graph &graph);
 
-private:
+ private:
   void Validatevertex(Graph &graph, int vertex);
 };
 
-} // namespace s21
+}  // namespace s21
 
-#endif // SRC_ALGORITHMS_GRAPH_ALGORITHMS_H_
+#endif  // SRC_ALGORITHMS_GRAPH_ALGORITHMS_H_

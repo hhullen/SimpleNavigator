@@ -110,7 +110,7 @@ void TSPAlgorithm::UpdateResult(TsmResult &result, int distance, size_t dest) {
   result.vertices.push_back(static_cast<int>(dest) + 1);
 }
 
-void TSPAlgorithm::SetNewResult(TsmResult &result) {
+void TSPAlgorithm::SetNewResult(const TsmResult &result) {
   if (result_.distance == 0 || result.distance < result_.distance) {
     result_ = result;
   }

@@ -9,12 +9,11 @@ vector<int> GraphAlgorithms::depthFirstSearch(Graph &graph, int startVertex) {
   vector<int> result;
   vector<bool> visited;
   stack<int> stack_vertex;
-  int pop_vertex = 0;
   int matrix_size = graph.get_size();
   visited.resize(matrix_size);
   stack_vertex.push(startVertex - 1);
   while (!stack_vertex.empty()) {
-    pop_vertex = stack_vertex.top();
+    int pop_vertex = stack_vertex.top();
     stack_vertex.pop();
     if (!visited[pop_vertex]) {
       visited[pop_vertex] = 1;
@@ -37,9 +36,8 @@ vector<int> GraphAlgorithms::breadthFirstSearch(Graph &graph, int startVertex) {
   int matrix_size = graph.get_size();
   visited.resize(matrix_size);
   queue_vertex.push(startVertex - 1);
-  int pop_vertex = 0;
   while (!queue_vertex.empty()) {
-    pop_vertex = queue_vertex.front();
+    int pop_vertex = queue_vertex.front();
     queue_vertex.pop();
     if (!visited[pop_vertex]) {
       visited[pop_vertex] = 1;
@@ -65,9 +63,8 @@ int GraphAlgorithms::getShortestPathBetweenVertices(Graph &graph, int vertex1,
   weights[vertex1 - 1] = 0;
   visited.resize(matrix_size);
   queue_vertex.push(vertex1 - 1);
-  int pop_vertex = 0;
   while (!queue_vertex.empty()) {
-    pop_vertex = queue_vertex.front();
+    int pop_vertex = queue_vertex.front();
     queue_vertex.pop();
     if (!visited[pop_vertex]) {
       visited[pop_vertex] = 1;
@@ -104,17 +101,16 @@ Graph GraphAlgorithms::getShortestPathsBetweenAllVertices(Graph &graph) {
   return result;
 }
 
-std::vector<std::vector<int>>
-GraphAlgorithms::getLeastSpanningTree(Graph &graph) {
+vector<vector<int>> GraphAlgorithms::getLeastSpanningTree(Graph &graph) {
   int graph_size = graph.get_size();
   vector<bool> visited;
   visited.resize(graph_size);
   visited[0] = 0;
-  std::vector<int> path(graph_size, -1);
-  std::vector<int> min(graph_size, INT_MAX);
+  vector<int> path(graph_size, -1);
+  vector<int> min(graph_size, INT_MAX);
   min[0] = 0;
   Graph tmp = graph;
-  std::vector<std::vector<int>> res(graph_size, std::vector<int>(graph_size));
+  vector<vector<int>> res(graph_size, vector<int>(graph_size));
   for (int i = 0; i < graph_size; ++i) {
     for (int j = 0; j < graph_size; ++j) {
       if (i != j && tmp(i, j) == 0) {
@@ -129,7 +125,7 @@ GraphAlgorithms::getLeastSpanningTree(Graph &graph) {
         vert = j;
       }
     }
-    if (min[vert] == INT_MAX) {
+    if (vert == -1 || min[vert] == INT_MAX) {
       throw invalid_argument("Incorrect graph");
     }
     visited.at(vert) = true;
@@ -158,4 +154,4 @@ void GraphAlgorithms::Validatevertex(Graph &graph, int vertex) {
   }
 }
 
-} // namespace s21
+}  // namespace s21

@@ -5,8 +5,8 @@ ALGORITHMS_DIR=algorithms
 CLI_DIR=utility_cli
 INCLUDE_DIR=include
 GRAPH_BUILD_FILES=$(GRAPH_DIR)$(SEP)graph.cc
-ALGORITHMS_BUILD_FILES=$(ALGORITHMS_DIR)$(SEP)graph_algorithms.cc \
-					   $(ALGORITHMS_DIR)$(SEP)tsp_algorithm$(SEP)tsp_algorithm.cc
+ALGORITHMS_BUILD_FILES=$(ALGORITHMS_DIR)$(SEP)*.cc \
+					   $(ALGORITHMS_DIR)$(SEP)tsp_algorithm$(SEP)*.cc
 TESTBUILD_FILES=$(TEST_DIR)$(SEP)$(MAIN_PROJ_NAME)_tests.cc
 CLI_BULD_FILES=$(CLI_DIR)/utility_cli.cc
 TEST_EXECUTABLE=$(MAIN_PROJ_NAME)_test.out
@@ -17,11 +17,13 @@ LIBS_TO_COMPILE=-L. -l$(DOT_LIB) -l$(GRAPH_LIB) -l$(ALGORITHMS_LIB)
 DOT_LIB=dotlib
 COMPILER=g++
 STD=--std=c++17
-CODE_DIAG_FLAGS=-Wno-write-strings -Wall -Wextra -Werror -Wpedantic
+CODE_DIAG_FLAGS=-Wall -Wextra -Werror -Wpedantic
 TEST_FLAGS=-lgtest -pthread -lgtest_main
 CLANG_FILE=.clang-format
 CLANG_FILE_WAY=..$(SEP)materials$(SEP)linters$(SEP)$(CLANG_FILE)
-CHECK_FILES=$(GRAPH_DIR)$(SEP)* $(ALGORITHMS_DIR)$(SEP)* $(CLI_DIR)$(SEP)*
+CHECK_FILES=$(GRAPH_DIR)$(SEP)* $(ALGORITHMS_DIR)$(SEP)*.* \
+			$(ALGORITHMS_DIR)$(SEP)tsp_algorithm$(SEP)*.* \
+			$(CLI_DIR)$(SEP)*
 CPPCH_SETUP=--enable=all --suppress=missingInclude --suppress=unusedFunction -v --language=c++ $(STD)
 BUILD_DIR=..$(SEP)build
 TO_DELETE_FILES=*.o *.out *.dSYM *.gch .DS_Store $(TEST_EXECUTABLE) $(CLI_EXECUTABLE) $(CLANG_FILE) \
@@ -57,7 +59,7 @@ endif
 
 .PHONY: all check tests clean
 
-all: clean tests nav_cli
+all: clean tests nav_cli check
 
 $(GRAPH_LIB).a: libs21_graph.a
 

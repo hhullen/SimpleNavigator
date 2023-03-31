@@ -16,8 +16,9 @@ using std::vector;
 namespace s21 {
 
 struct TsmResult {
+  TsmResult() : distance(0) {}
   vector<int> vertices;
-  double distance = 0;
+  double distance;
 };
 
 class TSPAlgorithm {
@@ -44,7 +45,7 @@ class TSPAlgorithm {
   void RunPheromonesEvaporation();
   void AddPheromoneTrack(size_t start, size_t dest);
   void UpdateResult(TsmResult &result, int distance, size_t dest);
-  void SetNewResult(TsmResult &result);
+  void SetNewResult(const TsmResult &result);
 };
 
 }  // namespace s21

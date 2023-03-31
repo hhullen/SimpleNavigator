@@ -34,8 +34,8 @@ class UtilityCLI {
 
   void InitialiseAlgorithms();
   void ReadArguments(int argc, char* argv[]);
-  bool IsOption(string& arg);
-  void CheckNextPresence(int i, int argc, string& arg);
+  bool IsOption(const string& arg);
+  void CheckNextPresence(int i, int argc, const string& arg);
 
   void InitializeGraph();
   string GetOptionParameterIfExists(string option,
@@ -50,7 +50,7 @@ class UtilityCLI {
   int GetStartVertexOption();
   int GetEndVertexOption();
   void WriteOutFile();
-  void PrintRoute(vector<int>& vertices);
+  void PrintRoute(const vector<int>& vertices);
 };
 
 }  // namespace s21

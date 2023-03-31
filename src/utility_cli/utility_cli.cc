@@ -26,11 +26,11 @@ void UtilityCLI::ReadArguments(int argc, char *argv[]) {
   }
 }
 
-bool UtilityCLI::IsOption(string &arg) {
+bool UtilityCLI::IsOption(const string &arg) {
   return arg.size() == 2 && arg[0] == '-' && !isdigit(arg[1]);
 }
 
-void UtilityCLI::CheckNextPresence(int i, int argc, string &arg) {
+void UtilityCLI::CheckNextPresence(int i, int argc, const string &arg) {
   if (!(i + 1 < argc)) {
     throw invalid_argument("No parameter specified to " + arg + " option.");
   }
@@ -98,7 +98,7 @@ void UtilityCLI::SPBA() {
 }
 
 void UtilityCLI::LST() {
-  Graph result = algorithms_.getLeastSpanningTree(graph_);
+  Graph result(algorithms_.getLeastSpanningTree(graph_));
   Graph::Print(result);
 }
 
@@ -130,7 +130,7 @@ void UtilityCLI::WriteOutFile() {
   graph_.ExportGraphToDot(file_path);
 }
 
-void UtilityCLI::PrintRoute(vector<int> &vertices) {
+void UtilityCLI::PrintRoute(const vector<int> &vertices) {
   size_t i = 0;
   for (; i < vertices.size() - 1; ++i) {
     cout << vertices[i] << "-";
@@ -138,4 +138,4 @@ void UtilityCLI::PrintRoute(vector<int> &vertices) {
   cout << vertices[i] << "\n";
 }
 
-} // namespace s21
+}  // namespace s21
