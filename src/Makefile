@@ -109,3 +109,4 @@ nav_cli: libdotlib.a libs21_graph.a libs21_graph_algorithms.a
 	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m SPBA
 	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m LST
 	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m TSP
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -o dot_test.dot
