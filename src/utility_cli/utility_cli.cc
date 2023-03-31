@@ -2,7 +2,7 @@
 
 namespace s21 {
 
-UtilityCLI::UtilityCLI(int argc, char* argv[]) {
+UtilityCLI::UtilityCLI(int argc, char *argv[]) {
   ReadArguments(argc, argv);
   InitialiseAlgorithms();
 }
@@ -16,7 +16,7 @@ void UtilityCLI::InitialiseAlgorithms() {
   algorithms_runners_["TSP"] = &UtilityCLI::TSP;
 }
 
-void UtilityCLI::ReadArguments(int argc, char* argv[]) {
+void UtilityCLI::ReadArguments(int argc, char *argv[]) {
   for (int i = 0; i < argc; ++i) {
     string arg(argv[i]);
     if (IsOption(arg)) {
@@ -26,11 +26,11 @@ void UtilityCLI::ReadArguments(int argc, char* argv[]) {
   }
 }
 
-bool UtilityCLI::IsOption(string& arg) {
+bool UtilityCLI::IsOption(string &arg) {
   return arg.size() == 2 && arg[0] == '-' && !isdigit(arg[1]);
 }
 
-void UtilityCLI::CheckNextPresence(int i, int argc, string& arg) {
+void UtilityCLI::CheckNextPresence(int i, int argc, string &arg) {
   if (!(i + 1 < argc)) {
     throw invalid_argument("No parameter specified to " + arg + " option.");
   }
@@ -97,7 +97,10 @@ void UtilityCLI::SPBA() {
   Graph::Print(result);
 }
 
-void UtilityCLI::LST() { cout << "Jesus Christ! It's LeastSpanningTree!\n"; }
+void UtilityCLI::LST() {
+  Graph result = algorithms_.getLeastSpanningTree(graph_);
+  Graph::Print(result);
+}
 
 void UtilityCLI::TSP() {
   TsmResult result = algorithms_.solveTravelingSalesmanProblem(graph_);
@@ -127,7 +130,7 @@ void UtilityCLI::WriteOutFile() {
   graph_.ExportGraphToDot(file_path);
 }
 
-void UtilityCLI::PrintRoute(vector<int>& vertices) {
+void UtilityCLI::PrintRoute(vector<int> &vertices) {
   size_t i = 0;
   for (; i < vertices.size() - 1; ++i) {
     cout << vertices[i] << "-";
@@ -135,4 +138,4 @@ void UtilityCLI::PrintRoute(vector<int>& vertices) {
   cout << vertices[i] << "\n";
 }
 
-}  // namespace s21
+} // namespace s21

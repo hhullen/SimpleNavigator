@@ -3,29 +3,6 @@
 namespace s21 {
 
 GraphAlgorithms::GraphAlgorithms() {}
-vector<int> GraphAlgorithms::depthFirstSearch(Graph &graph, int startVertex) {
-  vector<int> result;
-  vector<bool> visited;
-  stack<int> stack_vertex;
-  int pop_vertex = 0;
-  int matrix_size = graph.get_size();
-  visited.resize(matrix_size);
-  stack_vertex.push(startVertex - 1);
-  while (!stack_vertex.empty()) {
-    pop_vertex = stack_vertex.top();
-    stack_vertex.pop();
-    if (!visited[pop_vertex]) {
-      visited[pop_vertex] = 1;
-      for (int i = matrix_size - 1; i >= 0; --i) {
-        if (graph(pop_vertex, i) && !visited[i]) {
-          stack_vertex.push(i);
-        }
-      }
-      result.push_back(pop_vertex + 1);
-    }
-  }
-  return result;
-}
 
 vector<int> GraphAlgorithms::depthFirstSearch(Graph &graph, int startVertex) {
   Validatevertex(graph, startVertex);
@@ -153,8 +130,7 @@ GraphAlgorithms::getLeastSpanningTree(Graph &graph) {
       }
     }
     if (min[vert] == INT_MAX) {
-      std::cout << "wrong graph";
-      exit(0);
+      throw invalid_argument("Incorrect graph");
     }
     visited.at(vert) = true;
     if (path.at(vert) != -1) {

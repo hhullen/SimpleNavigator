@@ -28,6 +28,8 @@ using std::vector;
 
 class AdjacencyMatrix {
 public:
+  AdjacencyMatrix() {}
+  AdjacencyMatrix(vector<vector<int>> matrix) : matrix_(matrix) {}
   void Clear() {
     matrix_.clear();
     matrix_.shrink_to_fit();
@@ -53,6 +55,7 @@ class Graph {
 public:
   Graph();
   explicit Graph(int size);
+  Graph(vector<vector<int>> matrix);
   ~Graph();
 
   int &operator()(int i, int j);

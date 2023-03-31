@@ -8,6 +8,12 @@ Graph::Graph(int size) : input_file_(nullptr), output_file_(nullptr) {
   Resize(size);
 }
 
+Graph::Graph(vector<vector<int>> matrix)
+    : input_file_(nullptr), output_file_(nullptr) {
+  matrix_ = AdjacencyMatrix(matrix);
+  Resize(matrix.size());
+}
+
 Graph::~Graph() { matrix_.Clear(); }
 
 int &Graph::operator()(int i, int j) { return matrix_(i, j); }
@@ -139,4 +145,4 @@ void Graph::AddEdgeBetwenNodesToDotWriterObject(int i, int j,
   }
 }
 
-}  // namespace s21
+} // namespace s21

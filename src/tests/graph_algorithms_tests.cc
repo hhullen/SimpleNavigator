@@ -114,10 +114,26 @@ TEST(algorithms_tests, SPBA) {
   EXPECT_NO_THROW(algorithm.getShortestPathsBetweenAllVertices(graph));
 }
 
-TEST(algorithms_tests, timespec) {
+TEST(algorithms_tests, TSP) {
   GraphAlgorithms algorithm;
   Graph graph;
   string file = "tests/graph_example.txt";
   graph.LoadGraphFromFile(file);
   EXPECT_NO_THROW(algorithm.solveTravelingSalesmanProblem(graph));
+}
+
+TEST(algorithms_tests, LST) {
+  GraphAlgorithms algorithm;
+  Graph graph;
+  string file = "tests/graph_example.txt";
+  graph.LoadGraphFromFile(file);
+  EXPECT_NO_THROW(algorithm.getLeastSpanningTree(graph));
+}
+
+TEST(algorithms_tests, INC_LST) {
+  GraphAlgorithms algorithm;
+  Graph graph;
+  string file = "tests/graph_example_bad_graph.txt";
+  graph.LoadGraphFromFile(file);
+  EXPECT_THROW(algorithm.getLeastSpanningTree(graph), invalid_argument);
 }
