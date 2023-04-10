@@ -9,9 +9,9 @@
 #include "../graph/graph.h"
 #include "tsp_algorithm/tsp_algorithm.h"
 
-using std::invalid_argument;
-
 namespace s21 {
+
+using std::invalid_argument;
 
 class GraphAlgorithms {
  public:

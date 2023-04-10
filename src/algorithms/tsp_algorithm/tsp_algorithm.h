@@ -7,13 +7,13 @@
 
 #include "../../graph/graph.h"
 
+namespace s21 {
+
 using std::find;
 using std::pair;
 using std::pow;
 using std::rand;
 using std::vector;
-
-namespace s21 {
 
 struct TsmResult {
   TsmResult() : distance(0) {}

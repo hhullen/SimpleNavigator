@@ -4,6 +4,8 @@
 
 using s21::UtilityCLI;
 using std::invalid_argument;
+using std::string;
+using std::vector;
 
 TEST(cli_tests, constructor_with_args) {
   int argc = 5;

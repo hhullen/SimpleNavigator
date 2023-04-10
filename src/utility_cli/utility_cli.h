@@ -8,6 +8,8 @@
 #include "../algorithms/graph_algorithms.h"
 #include "../graph/graph.h"
 
+namespace s21 {
+
 using s21::Graph;
 using s21::GraphAlgorithms;
 using std::atoi;
@@ -16,8 +18,6 @@ using std::invalid_argument;
 using std::isdigit;
 using std::map;
 using std::string;
-
-namespace s21 {
 
 class UtilityCLI {
  public:
