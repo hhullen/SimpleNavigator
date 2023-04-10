@@ -26,9 +26,9 @@ CHECK_FILES=$(GRAPH_DIR)$(SEP)* $(ALGORITHMS_DIR)$(SEP)*.* \
 			$(CLI_DIR)$(SEP)*
 CPPCH_SETUP=--enable=all --suppress=missingInclude --suppress=unusedFunction -v --language=c++ $(STD)
 BUILD_DIR=..$(SEP)build
-TO_DELETE_FILES=*.o *.out *.dSYM *.gch .DS_Store $(TEST_EXECUTABLE) $(CLI_EXECUTABLE) $(CLANG_FILE) \
-				dot_test.dot lib$(GRAPH_LIB).a lib$(ALGORITHMS_LIB).a lib$(DOT_LIB).a
-TO_DELETE_FOLDERS=$(BUILD_DIR)
+TO_DELETE_FILES=*.o *.out *.dSYM *.gch *.gcda *.gcno .DS_Store $(TEST_EXECUTABLE) $(CLI_EXECUTABLE) $(CLANG_FILE) \
+				*.info dot_test.dot lib$(GRAPH_LIB).a lib$(ALGORITHMS_LIB).a lib$(DOT_LIB).a
+TO_DELETE_FOLDERS=$(BUILD_DIR) report
 
 #Crossplatform specs
 SEP='\'
@@ -94,6 +94,16 @@ check:
 tests: $(DOT_LIB).a $(GRAPH_LIB).a $(ALGORITHMS_LIB).a
 	$(COMPILER) $(STD) $(TESTBUILD_FILES) $(CLI_BULD_FILES) $(TEST_FLAGS) \
 	-I $(INCLUDE_DIR) $(LIBS_TO_COMPILE) -o $(TEST_EXECUTABLE)
+	.$(SEP)$(TEST_EXECUTABLE)
+
+gcov_report: gcov_build
+	lcov -t "test" -o test.info -c -d .
+	genhtml -o report test.info
+
+gcov_build: $(DOT_LIB).a
+	$(COMPILER) $(STD) $(TESTBUILD_FILES) $(CLI_BULD_FILES) $(GRAPH_BUILD_FILES) \
+	$(ALGORITHMS_BUILD_FILES) -I $(INCLUDE_DIR) -L. -l$(DOT_LIB) $(TEST_FLAGS) \
+	-o $(TEST_EXECUTABLE) --coverage
 	.$(SEP)$(TEST_EXECUTABLE)
 
 clean:
