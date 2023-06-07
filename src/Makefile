@@ -8,7 +8,7 @@ GRAPH_BUILD_FILES=$(GRAPH_DIR)$(SEP)graph.cc
 ALGORITHMS_BUILD_FILES=$(ALGORITHMS_DIR)$(SEP)*.cc \
 					   $(ALGORITHMS_DIR)$(SEP)tsp_algorithm$(SEP)*.cc
 TESTBUILD_FILES=$(TEST_DIR)$(SEP)$(MAIN_PROJ_NAME)_tests.cc
-CLI_BULD_FILES=$(CLI_DIR)/utility_cli.cc
+CLI_BULD_FILES=$(CLI_DIR)$(SEP)utility_cli.cc
 TEST_EXECUTABLE=$(MAIN_PROJ_NAME)_test.out
 CLI_EXECUTABLE=nav
 ALGORITHMS_LIB=s21_graph_algorithms
@@ -80,7 +80,7 @@ libs21_graph_algorithms.a:
 $(DOT_LIB).a: libdotlib.a
 
 libdotlib.a:
-	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -O3 -c $(INCLUDE_DIR)$(SEP)dot_writer/*.cpp
+	$(COMPILER) $(STD) $(CODE_DIAG_FLAGS) -O3 -c $(INCLUDE_DIR)$(SEP)dot_writer$(SEP)*.cpp
 	ar cr lib$(DOT_LIB).a *.o
 	ranlib lib$(DOT_LIB).a
 	$(DELETE_FILE) *.o
@@ -113,10 +113,10 @@ clean:
 nav_cli: libdotlib.a libs21_graph.a libs21_graph_algorithms.a
 	$(MAKEDIR) -p $(BUILD_DIR)
 	g++ $(STD) -O3 -o $(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) main.cc $(CLI_BULD_FILES) $(LIBS_TO_COMPILE)  -I $(INCLUDE_DIR)
-	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m DFS -s 4
-	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m BFS -s 9
-	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m SPBV -s 7 -e 1
-	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m SPBA
-	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m LST
-	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -m TSP
-	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests/graph_example.txt -o dot_test.dot
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests$(SEP)graph_example.txt -m DFS -s 4
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests$(SEP)graph_example.txt -m BFS -s 9
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests$(SEP)graph_example.txt -m SPBV -s 7 -e 1
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests$(SEP)graph_example.txt -m SPBA
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests$(SEP)graph_example.txt -m LST
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests$(SEP)graph_example.txt -m TSP
+	.$(SEP)$(BUILD_DIR)$(SEP)$(CLI_EXECUTABLE) -f tests$(SEP)graph_example.txt -o dot_test.dot
