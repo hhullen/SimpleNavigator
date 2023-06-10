@@ -40,9 +40,6 @@ void UtilityCLI::Exec() {
 }
 
 void UtilityCLI::InitializeGraph() {
-  // Str file_path = GetOptionParameterIfExists(
-  //     "-f",
-  //     "No input graph file specified. For instance: ... -f path/to/file.");
   FlagValues file = command_line_.GetFlagValues("--file");
   Str file_path = file.front();
   graph_.LoadGraphFromFile(file_path);
@@ -53,7 +50,6 @@ void UtilityCLI::RunAlgorithm() {
   try {
     FlagValues mode_flag = command_line_.GetFlagValues("--mode");
     mode = mode_flag.front();
-    // mode = GetOptionParameterIfExists("-m");
   } catch (...) {
     return;
   }
@@ -105,7 +101,6 @@ void UtilityCLI::WriteOutFile() {
   try {
     FlagValues output = command_line_.GetFlagValues("--output");
     file_path = output.front();
-    // file_path = GetOptionParameterIfExists("-o");
   } catch (...) {
     return;
   }
