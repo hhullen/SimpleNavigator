@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../utility_cli/utility_cli.h"
+#include "../utility_cli/utility_cli.cc"
 
 using s21::UtilityCLI;
 using std::invalid_argument;
@@ -9,252 +9,283 @@ using std::vector;
 
 TEST(cli_tests, constructor_with_args) {
   int argc = 5;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("TSP").data();
-  // char *argv[] = {"nav", "-f", "tests/graph_example.txt", "-m", "TSP"};
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "TSP",
+  });
   EXPECT_NO_THROW(UtilityCLI cli(argc, argv.data()));
 }
 
 TEST(cli_tests, constructor_no_args) {
   int argc = 1;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
+  vector<const char *> argv({"nav"});
   EXPECT_NO_THROW(UtilityCLI cli(argc, argv.data()));
 }
 
 TEST(cli_tests, constructor_option_with_no_parameter) {
   int argc = 2;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+  });
   EXPECT_THROW(UtilityCLI cli(argc, argv.data()), invalid_argument);
 }
 
 TEST(cli_tests, constructor_option_with_options_in_a_row) {
   int argc = 5;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("-m").data();
-  argv[3] = string("-s").data();
-  argv[4] = string("-e").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "-m",
+      "-s",
+      "-e",
+  });
+
   EXPECT_THROW(UtilityCLI cli(argc, argv.data()), invalid_argument);
 }
 
 TEST(cli_tests, execution_wrong_mode) {
   int argc = 5;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("ABOBA").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "ABOBA",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_THROW(cli.Exec(), invalid_argument);
 }
 
 TEST(cli_tests, execution_with_no_options) {
   int argc = 1;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
+  vector<const char *> argv({"nav"});
   UtilityCLI cli(argc, argv.data());
   EXPECT_THROW(cli.Exec(), invalid_argument);
 }
 
 TEST(cli_tests, execution_DFS) {
   int argc = 7;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("DFS").data();
-  argv[5] = string("-s").data();
-  argv[6] = string("4").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "DFS",
+      "-s",
+      "4",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_NO_THROW(cli.Exec());
 }
 
 TEST(cli_tests, execution_DFS_overwhelmed_vertex_value) {
   int argc = 7;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("DFS").data();
-  argv[5] = string("-s").data();
-  argv[6] = string("60").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "DFS",
+      "-s",
+      "60",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_THROW(cli.Exec(), invalid_argument);
 }
 
 TEST(cli_tests, execution_DFS_negative_vertex_value) {
   int argc = 7;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("DFS").data();
-  argv[5] = string("-s").data();
-  argv[6] = string("-60").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "DFS",
+      "-s",
+      "-60",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_THROW(cli.Exec(), invalid_argument);
 }
 
 TEST(cli_tests, execution_BFS) {
   int argc = 7;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("BFS").data();
-  argv[5] = string("-s").data();
-  argv[6] = string("4").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "BFS",
+      "-s",
+      "4",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_NO_THROW(cli.Exec());
 }
 
 TEST(cli_tests, execution_BFS_overwhelmed_vertex_value) {
   int argc = 7;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("BFS").data();
-  argv[5] = string("-s").data();
-  argv[6] = string("60").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "BFS",
+      "-s",
+      "60",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_THROW(cli.Exec(), invalid_argument);
 }
 
 TEST(cli_tests, execution_BFS_negative_vertex_value) {
   int argc = 7;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("BFS").data();
-  argv[5] = string("-s").data();
-  argv[6] = string("-60").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "BFS",
+      "-s",
+      "-60",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_THROW(cli.Exec(), invalid_argument);
 }
 
 TEST(cli_tests, execution_SPBV) {
   int argc = 9;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("SPBV").data();
-  argv[5] = string("-s").data();
-  argv[6] = string("4").data();
-  argv[7] = string("-e").data();
-  argv[8] = string("9").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "SPBV",
+      "-s",
+      "4",
+      "-e",
+      "9",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_NO_THROW(cli.Exec());
 }
 
 TEST(cli_tests, execution_SPBV_overwhelmed_vertex_value) {
   int argc = 9;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("SPBV").data();
-  argv[5] = string("-s").data();
-  argv[6] = string("430").data();
-  argv[7] = string("-e").data();
-  argv[8] = string("900").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "SPBV",
+      "-s",
+      "430",
+      "-e",
+      "900",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_THROW(cli.Exec(), invalid_argument);
 }
 
 TEST(cli_tests, execution_SPBV_negative_vertex_value) {
   int argc = 9;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("SPBV").data();
-  argv[5] = string("-s").data();
-  argv[6] = string("-3").data();
-  argv[7] = string("-e").data();
-  argv[8] = string("7").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "SPBV",
+      "-s",
+      "-3",
+      "-e",
+      "7",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_THROW(cli.Exec(), invalid_argument);
 }
 
 TEST(cli_tests, execution_SPBV_no_end_vertex) {
   int argc = 7;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("SPBV").data();
-  argv[5] = string("-s").data();
-  argv[6] = string("3").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "SPBV",
+      "-s",
+      "3",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_THROW(cli.Exec(), invalid_argument);
 }
 
 TEST(cli_tests, execution_SPBA) {
   int argc = 5;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("SPBA").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "SPBA",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_NO_THROW(cli.Exec());
 }
 
 TEST(cli_tests, execution_TSP) {
   int argc = 5;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("TSP").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "TSP",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_NO_THROW(cli.Exec());
 }
 
 TEST(cli_tests, execution_LST) {
   int argc = 5;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-m").data();
-  argv[4] = string("LST").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-m",
+      "LST",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_NO_THROW(cli.Exec());
 }
 
 TEST(cli_tests, execution_out_file) {
   int argc = 5;
-  vector<char *> argv(argc);
-  argv[0] = string("nav").data();
-  argv[1] = string("-f").data();
-  argv[2] = string("tests/graph_example.txt").data();
-  argv[3] = string("-o").data();
-  argv[4] = string("dot_test.dot").data();
+  vector<const char *> argv({
+      "nav",
+      "-f",
+      "tests/graph_example.txt",
+      "-o",
+      "dot_test.dot",
+  });
+
   UtilityCLI cli(argc, argv.data());
   EXPECT_NO_THROW(cli.Exec());
 }

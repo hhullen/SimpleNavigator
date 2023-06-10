@@ -2,38 +2,35 @@
 
 namespace s21 {
 
-UtilityCLI::UtilityCLI(int argc, char *argv[]) {
-  ReadArguments(argc, argv);
+UtilityCLI::UtilityCLI(int argc, const char *argv[]) {
+  Argument path = Argument("graph-path", Argument::Type::Path, "");
+  Flag input_file = Flag("file", 'f', "", {path});
+  Flag output_file = Flag("output", 'o', "", {path});
+
+  Argument mode_name = Argument("mode-name", Argument::Type::Str, "");
+  Flag mode = Flag("mode", 'm', "", {mode_name});
+
+  Argument node = Argument("node", Argument::Type::Int, "");
+  Flag start = Flag("start", 's', "", {node});
+  Flag end = Flag("end", 'e', "", {node});
+
+  command_line_.AddFlags({input_file, output_file, mode, start, end});
+  std::cout << "{";
+  for (int i = 0; i < argc; ++i) {
+    std::cout << "\"" << argv[i] << "\", ";
+  }
+  std::cout << "}\n";
+  command_line_.Read(argc, argv);
   InitialiseAlgorithms();
 }
 
 void UtilityCLI::InitialiseAlgorithms() {
-  algorithms_runners_["DFS"] = &UtilityCLI::DFS;
-  algorithms_runners_["BFS"] = &UtilityCLI::BFS;
-  algorithms_runners_["SPBV"] = &UtilityCLI::SPBV;
-  algorithms_runners_["SPBA"] = &UtilityCLI::SPBA;
-  algorithms_runners_["LST"] = &UtilityCLI::LST;
-  algorithms_runners_["TSP"] = &UtilityCLI::TSP;
-}
-
-void UtilityCLI::ReadArguments(int argc, char *argv[]) {
-  for (int i = 0; i < argc; ++i) {
-    string arg(argv[i]);
-    if (IsOption(arg)) {
-      CheckNextPresence(i, argc, arg);
-      arguments_[arg] = string(argv[i + 1]);
-    }
-  }
-}
-
-bool UtilityCLI::IsOption(const string &arg) {
-  return arg.size() == 2 && arg[0] == '-' && !isdigit(arg[1]);
-}
-
-void UtilityCLI::CheckNextPresence(int i, int argc, const string &arg) {
-  if (!(i + 1 < argc)) {
-    throw invalid_argument("No parameter specified to " + arg + " option.");
-  }
+  algorithms_runners_["DFS"] = &UtilityCLI::RunDFS;
+  algorithms_runners_["BFS"] = &UtilityCLI::RunBFS;
+  algorithms_runners_["SPBV"] = &UtilityCLI::RunSPBV;
+  algorithms_runners_["SPBA"] = &UtilityCLI::RunSPBA;
+  algorithms_runners_["LST"] = &UtilityCLI::RunLST;
+  algorithms_runners_["TSP"] = &UtilityCLI::RunTSP;
 }
 
 void UtilityCLI::Exec() {
@@ -43,25 +40,20 @@ void UtilityCLI::Exec() {
 }
 
 void UtilityCLI::InitializeGraph() {
-  string file_path = GetOptionParameterIfExists(
-      "-f",
-      "No input graph file specified. For instance: ... -f path/to/file.");
+  // Str file_path = GetOptionParameterIfExists(
+  //     "-f",
+  //     "No input graph file specified. For instance: ... -f path/to/file.");
+  FlagValues file = command_line_.GetFlagValues("--file");
+  Str file_path = file.front();
   graph_.LoadGraphFromFile(file_path);
 }
 
-string UtilityCLI::GetOptionParameterIfExists(string option,
-                                              string exception_message) {
-  if (arguments_.find(option) == arguments_.end()) {
-    throw invalid_argument(exception_message);
-  }
-
-  return arguments_.find(option)->second;
-}
-
 void UtilityCLI::RunAlgorithm() {
-  string mode;
+  Str mode;
   try {
-    mode = GetOptionParameterIfExists("-m");
+    FlagValues mode_flag = command_line_.GetFlagValues("--mode");
+    mode = mode_flag.front();
+    // mode = GetOptionParameterIfExists("-m");
   } catch (...) {
     return;
   }
@@ -72,58 +64,48 @@ void UtilityCLI::RunAlgorithm() {
   (this->*algorithms_runners_[mode])();
 }
 
-void UtilityCLI::DFS() {
-  int start_vertex = GetStartVertexOption();
+void UtilityCLI::RunDFS() {
+  int start_vertex = GetVertexOption("--start");
   vector<int> route = algorithms_.depthFirstSearch(graph_, start_vertex);
   PrintRoute(route);
 }
 
-void UtilityCLI::BFS() {
-  int start_vertex = GetStartVertexOption();
+void UtilityCLI::RunBFS() {
+  int start_vertex = GetVertexOption("--start");
   vector<int> route = algorithms_.breadthFirstSearch(graph_, start_vertex);
   PrintRoute(route);
 }
 
-void UtilityCLI::SPBV() {
-  int start_vertex = GetStartVertexOption();
-  int end_vertex = GetEndVertexOption();
+void UtilityCLI::RunSPBV() {
+  int start_vertex = GetVertexOption("--start");
+  int end_vertex = GetVertexOption("--end");
   int distance = algorithms_.getShortestPathBetweenVertices(
       graph_, start_vertex, end_vertex);
   cout << "Distance: " << distance << "\n";
 }
 
-void UtilityCLI::SPBA() {
+void UtilityCLI::RunSPBA() {
   Graph result = algorithms_.getShortestPathsBetweenAllVertices(graph_);
   Graph::Print(result);
 }
 
-void UtilityCLI::LST() {
+void UtilityCLI::RunLST() {
   Graph result(algorithms_.getLeastSpanningTree(graph_));
   Graph::Print(result);
 }
 
-void UtilityCLI::TSP() {
+void UtilityCLI::RunTSP() {
   TsmResult result = algorithms_.solveTravelingSalesmanProblem(graph_);
   PrintRoute(result.vertices);
   cout << "Distance: " << result.distance << "\n";
 }
 
-int UtilityCLI::GetStartVertexOption() {
-  string start_vertex_option = GetOptionParameterIfExists(
-      "-s", "No start vertex specified. For instance: ... -s 3.");
-  return atoi(start_vertex_option.data());
-}
-
-int UtilityCLI::GetEndVertexOption() {
-  string end_vertex_option = GetOptionParameterIfExists(
-      "-e", "No end vertex specified. For instance: ... -e 7.");
-  return atoi(end_vertex_option.data());
-}
-
 void UtilityCLI::WriteOutFile() {
-  string file_path;
+  Str file_path;
   try {
-    file_path = GetOptionParameterIfExists("-o");
+    FlagValues output = command_line_.GetFlagValues("--output");
+    file_path = output.front();
+    // file_path = GetOptionParameterIfExists("-o");
   } catch (...) {
     return;
   }
@@ -136,6 +118,12 @@ void UtilityCLI::PrintRoute(const vector<int> &vertices) {
     cout << vertices[i] << "-";
   }
   cout << vertices[i] << "\n";
+}
+
+int UtilityCLI::GetVertexOption(const Str &name) {
+  FlagValues flag_vertex = command_line_.GetFlagValues(name);
+  Str vertex = flag_vertex.front();
+  return atoi(vertex.data());
 }
 
 }  // namespace s21
