@@ -3,23 +3,18 @@
 namespace s21 {
 
 UtilityCLI::UtilityCLI(int argc, const char *argv[]) {
-  Argument path = Argument("graph-path", Argument::Type::Path, "");
-  Flag input_file = Flag("file", 'f', "", {path});
-  Flag output_file = Flag("output", 'o', "", {path});
+  Argument path("graph-path", Argument::Type::Path, "");
+  Flag input_file("file", 'f', "", {path});
+  Flag output_file("output", 'o', "", {path});
 
-  Argument mode_name = Argument("mode-name", Argument::Type::Str, "");
-  Flag mode = Flag("mode", 'm', "", {mode_name});
+  Argument mode_name("mode-name", Argument::Type::Str, "");
+  Flag mode("mode", 'm', "", {mode_name});
 
-  Argument node = Argument("node", Argument::Type::Int, "");
-  Flag start = Flag("start", 's', "", {node});
-  Flag end = Flag("end", 'e', "", {node});
+  Argument node("node", Argument::Type::Int, "");
+  Flag start("start", 's', "", {node});
+  Flag end("end", 'e', "", {node});
 
   command_line_.AddFlags({input_file, output_file, mode, start, end});
-  std::cout << "{";
-  for (int i = 0; i < argc; ++i) {
-    std::cout << "\"" << argv[i] << "\", ";
-  }
-  std::cout << "}\n";
   command_line_.Read(argc, argv);
   InitialiseAlgorithms();
 }
